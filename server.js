@@ -6,26 +6,28 @@ const path = require('path');
 const app = express();
 const server = http.createServer(app);
 
-// إعداد السوكيت مع السماح بالاتصال من أي مصدر (ضروري لـ Railway)
+// إعداد السوكيت مع حماية CORS
 const io = new Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+    cors: { origin: "*", methods: ["GET", "POST"] }
+});
+
+// --- إعدادات الحماية والأدمن ---
+const ADMIN_PASSWORD = "Mubdra_Admin_2026"; // 🔒 قم بتغيير كلمة السر هنا
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// مسار للتحقق من كلمة السر قبل دخول صفحة التحكم
+app.post('/admin-login', (req, res) => {
+    const { password } = req.body;
+    if (password === ADMIN_PASSWORD) {
+        res.json({ success: true });
+    } else {
+        res.status(401).json({ success: false, message: "كلمة المرور غير صحيحة" });
     }
 });
 
-// تحديد مسار مجلد public بدقة
-const PUBLIC_PATH = path.join(__dirname, 'public');
-
-// 1. تعريف المجلد الاستاتيكي (للملفات مثل CSS و JS)
-app.use(express.static(PUBLIC_PATH));
-
-// 2. التوجيه الرئيسي: عند فتح الدومين، يتم إرسال ملف index.html فوراً
-app.get('/', (req, res) => {
-    res.sendFile(path.join(PUBLIC_PATH, 'index.html'));
-});
-
-// حالة النظام (تخزين مؤقت)
+// حالة النظام الحالية
 let systemState = {
     liveStatus: 'offline', 
     streamUrl: '',
@@ -34,13 +36,11 @@ let systemState = {
 };
 
 io.on('connection', (socket) => {
-    console.log('مستخدم متصل: ' + socket.id);
-
-    // إرسال الحالة الحالية فور الاتصال
     socket.emit('syncState', systemState);
 
-    // أوامر التحكم (Admin)
+    // استقبال أوامر الأدمن
     socket.on('adminCommand', (data) => {
+        // تحديث الحالة بناءً على الأوامر
         if (data.action === 'START_LIVE') {
             systemState.liveStatus = 'online';
             systemState.streamUrl = data.url;
@@ -48,31 +48,22 @@ io.on('connection', (socket) => {
             systemState.liveStatus = 'offline';
         } else if (data.action === 'REFRESH_CODE') {
             systemState.accessCode = Math.floor(100000 + Math.random() * 900000).toString();
-        } else if (data.action === 'TOGGLE_CHAT') {
-            systemState.chatEnabled = data.status;
         }
-        // تحديث الجميع لحظياً
         io.emit('syncState', systemState);
     });
 
-    // نظام الشات
     socket.on('sendChatMessage', (msgData) => {
         if (systemState.chatEnabled) {
             io.emit('newChatMessage', {
-                user: msgData.user || 'مشارك',
+                user: msgData.user,
                 text: msgData.text,
                 time: new Date().toLocaleTimeString('ar-EG')
             });
         }
     });
-
-    socket.on('disconnect', () => {
-        console.log('مستخدم غادر المنصة');
-    });
 });
 
-// تشغيل السيرفر على المنفذ المخصص من Railway
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`المنصة تعمل الآن بنجاح على بورت: ${PORT}`);
+    console.log(`المنصة تعمل بأمان على بورت: ${PORT}`);
 });
