@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الاحترافية | بنكمل بعض</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* تنسيقات إضافية خاصة بالداشبورد */
+        .dash-container { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+        .sidebar { background: #fff; border-left: 2px solid #eee; padding: 20px; position: sticky; top: 70px; height: calc(100vh - 70px); }
+        .main-view { padding: 30px; background: #f8f9fa; }
+        
+        .stat-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-bottom: 4px solid var(--primary); transition: 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 10px; }
+
+        .live-code-box { background: linear-gradient(135deg, var(--primary), #3b5998); color: white; padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 30px; }
+        .code-display { font-size: 2.5rem; font-weight: bold; letter-spacing: 5px; color: var(--accent); text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin: 15px 0; }
+        
+        .chat-widget { background: white; border-radius: 15px; height: 400px; display: flex; flex-direction: column; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .chat-header { background: var(--primary); color: white; padding: 15px; border-radius: 15px 15px 0 0; font-weight: bold; }
+        .messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg-bubble { padding: 10px 15px; border-radius: 10px; max-width: 80%; font-size: 0.9rem; }
+        .msg-received { background: #f1f1f1; align-self: flex-start; }
+        .msg-sent { background: var(--primary); color: white; align-self: flex-end; }
+
+        .hidden { display: none !important; }
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
+        .admin-badge { background: #ff4757; color: white; }
+        .instructor-badge { background: #2ed573; color: white; }
+    </style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="logo"><i class="fas fa-users-rectangle"></i> بنكمل بعض</div>
+    <nav>
+        <ul class="nav-menu">
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="courses.html">اللجان</a></li>
+            <li><a href="live.html" style="color: #ff4757;"><i class="fas fa-circle-dot"></i> البث المباشر</a></li>
+            <li><button onclick="logout()" class="btn-join" style="background:#444; color:white !important;">خروج</button></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="dash-container">
+    <aside class="sidebar">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div id="userIcon" style="font-size: 4rem; color: var(--primary);"><i class="fas fa-user-circle"></i></div>
+            <h3 id="profileName" style="margin: 10px 0 5px 0;">اسم المستخدم</h3>
+            <span id="roleLabel" class="badge">متدرب</span>
+        </div>
+        <ul class="sidebar-menu" style="list-style: none; padding: 0;">
+            <li onclick="location.href='dashboard.html'" style="padding: 12px; background: #eee; border-radius: 8px; cursor: pointer;"><i class="fas fa-chart-pie"></i> نظرة عامة</li>
+            <li onclick="location.href='courses.html'" style="padding: 12px; cursor: pointer;"><i class="fas fa-graduation-cap"></i> دوراتي التعليمية</li>
+            <li class="instructor-only hidden" onclick="location.href='quizzes.html'" style="padding: 12px; cursor: pointer; color: #2ed573;"><i class="fas fa-plus-square"></i> إدارة الاختبارات</li>
+            <li class="admin-only hidden" style="padding: 12px; cursor: pointer; color: #ff4757;"><i class="fas fa-gears"></i> التحكم الرئيسي</li>
+            <li onclick="location.href='certificates.html'" style="padding: 12px; cursor: pointer;"><i class="fas fa-medal"></i> الشهادات</li>
+        </ul>
+    </aside>
+
+    <main class="main-view">
+        <div id="welcomeZone">
+            <h1 style="margin-bottom: 5px;">أهلاً بك في منصتك الذكية</h1>
+            <p style="color: #666;">مبادرة نشر الثقافة والعلوم لـ 100 مليون عربي</p>
+        </div>
+
+        <hr style="margin: 25px 0; border: 0; border-top: 1px solid #ddd;">
+
+        <div class="live-code-box" id="liveSection">
+            <h3><i class="fas fa-key"></i> كود الدخول الخاص بالبث المباشر</h3>
+            <p>مطلوب لدخول القاعة التفاعلية اليوم</p>
+            <div class="code-display" id="myAccessCode">------</div>
+            <button onclick="location.href='live.html'" class="btn-main" style="background: var(--accent); color: #000;">دخول البث الآن</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+            <div class="stat-card">
+                <i class="fas fa-book-reader"></i>
+                <h4>المواد المنجزة</h4>
+                <p style="font-size: 1.5rem; font-weight: bold;">12 / 24</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <h4>ساعات التدريب</h4>
+                <p style="font-size: 1.5rem; font-weight: bold;">48 ساعة</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-star"></i>
+                <h4>التقييم العام</h4>
+                <p style="font-size: 1.5rem; font-weight: bold;">9.8</p>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 350px; gap: 25px;">
+            <div class="card">
+                <h3><i class="fas fa-list-check"></i> مهام اللجان التنفيذية</h3>
+                <div style="margin-top: 15px;">
+                    <p><input type="checkbox"> لجنة ريادة الأعمال: تقديم دراسة جدوى المشروع.</p>
+                    <p><input type="checkbox"> لجنة الثقافة: رفع ملخص الكتاب الشهري.</p>
+                    <p><input type="checkbox"> لجنة العلوم: مراجعة محاضرة البحث العلمي.</p>
+                </div>
+                <button class="btn-main" style="margin-top: 20px; width: auto;">تحديث المهام</button>
+            </div>
+
+            <div class="chat-widget">
+                <div class="chat-header"><i class="fas fa-comments"></i> شات المبادرة (مباشر)</div>
+                <div class="messages" id="chatStream">
+                    <div class="msg-bubble msg-received"><b>أدمن المبادرة:</b> أهلاً بكم جميعاً، البث سيبدأ بعد قليل.</div>
+                </div>
+                <div style="padding: 10px; display: flex; gap: 5px;">
+                    <input type="text" id="chatInput" placeholder="اكتب رسالتك..." style="margin: 0;">
+                    <button onclick="sendMsg()" style="background: var(--primary); color: white; border: none; padding: 0 15px; border-radius: 8px;"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // وظائف التشغيل النهائية
+    window.onload = function() {
+        const role = localStorage.getItem('userRole');
+        const userData = JSON.parse(localStorage.getItem('userData')) || {name: "عضو المبادرة"};
+        
+        if(!role) { window.location.href = 'login.html'; return; }
+
+        // تحديث الواجهة بناء على الشخصية
+        document.getElementById('profileName').innerText = userData.name;
+        const label = document.getElementById('roleLabel');
+
+        if(role === 'admin') {
+            label.innerText = "المدير العام (آدمن)";
+            label.classList.add('admin-badge');
+            document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+            document.querySelectorAll('.instructor-only').forEach(el => el.classList.remove('hidden'));
+            document.getElementById('myAccessCode').innerText = "MASTER";
+        } else if(role === 'instructor') {
+            label.innerText = "مدرب / مجلس إدارة";
+            label.classList.add('instructor-badge');
+            document.querySelectorAll('.instructor-only').forEach(el => el.classList.remove('hidden'));
+            document.getElementById('myAccessCode').innerText = "COACH1";
+        } else {
+            // توليد كود دخول فريد للمتدرب (ريل تايم)
+            let code = localStorage.getItem('myLiveCode');
+            if(!code) {
+                code = Math.floor(100000 + Math.random() * 900000);
+                localStorage.setItem('myLiveCode', code);
+            }
+            document.getElementById('myAccessCode').innerText = code;
+        }
+    };
+
+    function sendMsg() {
+        const input = document.getElementById('chatInput');
+        if(input.value.trim() === "") return;
+        
+        const stream = document.getElementById('chatStream');
+        const div = document.createElement('div');
+        div.className = 'msg-bubble msg-sent';
+        div.innerHTML = `<b>أنا:</b> ${input.value}`;
+        stream.appendChild(div);
+        stream.scrollTop = stream.scrollHeight;
+        input.value = "";
+    }
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = 'login.html';
+    }
+</script>
+
+</body>
+</html>

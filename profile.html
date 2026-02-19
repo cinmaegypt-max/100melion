@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ملفي الشخصي | بنكمل بعض</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .profile-header { background: var(--primary); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 50px 50px; }
+        .user-avatar { width: 120px; height: 120px; border-radius: 60px; border: 5px solid white; background: #eee; margin-top: -60px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+        .access-card { background: #fff3cd; border: 2px dashed #ffa502; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">بنكمل بعض</div>
+        <nav><ul class="nav-menu"><li><a href="dashboard.html">العودة للوحة التحكم</a></li></ul></nav>
+    </header>
+
+    <div class="profile-header">
+        <h1 id="pName">اسم المتدرب</h1>
+        <p id="pRole">عضو في لجنة ريادة الأعمال</p>
+    </div>
+
+    <div class="container" style="text-align: center;">
+        <div class="user-avatar" style="margin: -60px auto 20px auto; overflow: hidden;">
+            <i class="fas fa-user-tie fa-5x" style="margin-top: 20px; color: #ccc;"></i>
+        </div>
+
+        <div class="access-card">
+            <h3>كود دخول البث المباشر اليوم</h3>
+            <div id="liveCodeDisplay" style="font-size: 2.5rem; font-weight: bold; color: var(--primary);">------</div>
+            <p><small>لا تشارك هذا الكود مع أحد؛ هو مخصص لدخولك الشخصي فقط.</small></p>
+        </div>
+
+        <div class="info-grid">
+            <div class="card">
+                <h4><i class="fas fa-id-card"></i> بيانات العضوية</h4>
+                <p>رقم القيد: <span id="regNum">2026-0001</span></p>
+                <p>الدولة: مصر</p>
+            </div>
+            <div class="card">
+                <h4><i class="fas fa-briefcase"></i> المسار الحالي</h4>
+                <p>اللجنة: ريادة الأعمال</p>
+                <p>المستوى: متقدم</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const userData = JSON.parse(localStorage.getItem('userData')) || {name: "متدرب المبادرة"};
+            document.getElementById('pName').innerText = userData.name;
+            
+            // جلب كود البث المولد في الداشبورد
+            const code = localStorage.getItem('myLiveCode') || "123456";
+            document.getElementById('liveCodeDisplay').innerText = code;
+        }
+    </script>
+</body>
+</html>

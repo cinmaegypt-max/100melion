@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تحكم الباك إيند | بنكمل بعض</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>لوحة قيادة البث المباشر (الآدمن)</h2>
+            <div style="margin-bottom: 20px;">
+                <label>رابط البث (YouTube Embed URL):</label>
+                <input type="text" id="streamUrlInput" placeholder="https://www.youtube.com/embed/...">
+            </div>
+            <button onclick="startLive()" class="btn-submit" style="background: green;">إطلاق البث للمنصة</button>
+            <button onclick="stopLive()" class="btn-submit" style="background: red; margin-top: 10px;">إيقاف البث فوراً</button>
+        </div>
+
+        <div class="card" style="background: #f0f4f8;">
+            <h3>إدارة الأكواد ريل تايم</h3>
+            <p>الكود الفعال حالياً لدخول المتدربين:</p>
+            <h1 id="liveCodeDisplay" style="color: blue; font-size: 3rem;">------</h1>
+            <button onclick="refreshCode()" class="btn-join">توليد كود دخول جديد</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+
+        socket.on('syncState', (state) => {
+            document.getElementById('liveCodeDisplay').innerText = state.accessCode;
+        });
+
+        function startLive() {
+            const url = document.getElementById('streamUrlInput').value;
+            if(!url) return alert("يرجى وضع رابط البث");
+            socket.emit('adminCommand', { action: 'START_LIVE', url: url });
+        }
+
+        function stopLive() {
+            socket.emit('adminCommand', { action: 'STOP_LIVE' });
+        }
+
+        function refreshCode() {
+            socket.emit('adminCommand', { action: 'REFRESH_CODE' });
+        }
+    </script>
+</body>
+</html>

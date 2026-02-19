@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>بوابة الشهادات الرقمية | IBPT</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .cert-frame { 
+            border: 15px double #1e3a8a; padding: 50px; background: white; 
+            text-align: center; position: relative; max-width: 800px; margin: auto;
+        }
+        .cert-watermark { position: absolute; opacity: 0.1; top: 25%; left: 25%; font-size: 10rem; transform: rotate(-45deg); }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">شهادات بنكمل بعض</div>
+    </header>
+
+    <div class="container">
+        <div class="card" style="text-align: center;">
+            <img src="https://via.placeholder.com/100?text=IBPT" alt="IBPT Logo">
+            <h3>استخراج الشهادات المعتمدة</h3>
+            <p>أدخل كود النجاح الممنوح لك بعد اجتياز الاختبارات</p>
+            <input type="text" id="certCode" placeholder="مثلاً: PASS-2026" style="max-width:300px; text-align: center;">
+            <button class="btn-submit" onclick="generateCert()">عرض الشهادة</button>
+        </div>
+
+        <div id="certArea" class="hidden" style="margin-top: 30px;">
+            <div class="cert-frame">
+                <div class="cert-watermark">IBPT</div>
+                <h1 style="color: #1e3a8a;">شهادة إنجاز برنامج تدريبي</h1>
+                <p>تشهد إدارة مبادرة <b>(بنكمل بعض)</b> بالتعاون مع البورد الدولي</p>
+                <p>بأن السيد/ <b id="certUserName" style="font-size: 1.5rem; border-bottom: 2px solid #ffd700;">---</b></p>
+                <p>قد اجتاز بنجاح المسار التدريبي المتقدم في <b>لجنة ريادة الأعمال</b></p>
+                <div style="margin-top: 50px; display: flex; justify-content: space-around;">
+                    <div><small>توقيع المدير العام</small></div>
+                    <div><small>ختم IBPT الدولي</small></div>
+                </div>
+            </div>
+            <button class="btn-main" style="margin-top: 20px;" onclick="window.print()">طباعة الشهادة PDF</button>
+        </div>
+    </div>
+
+    <script>
+        function generateCert() {
+            const code = document.getElementById('certCode').value;
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            if(code === "PASS-2026") {
+                document.getElementById('certArea').classList.remove('hidden');
+                document.getElementById('certUserName').innerText = userData ? userData.name : "المتدرب المتميز";
+            } else {
+                alert("الكود غير صحيح أو لم تكتمل متطلبات النجاح بعد.");
+            }
+        }
+    </script>
+</body>
+</html>
