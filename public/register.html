@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>انضم لنا | التسجيل السحابي</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 450px;">
+        <div class="card">
+            <h2>إنشاء حساب في المبادرة</h2>
+            <form id="regForm">
+                <input type="text" id="regName" placeholder="الاسم الكامل" required>
+                <input type="email" id="regEmail" placeholder="البريد الإلكتروني" required>
+                <input type="password" id="regPass" placeholder="كلمة المرور" required>
+                <select id="regRole">
+                    <option value="student">متدرب</option>
+                    <option value="instructor">مدرب</option>
+                </select>
+                <button type="submit" class="btn-submit">إنشاء الحساب</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db, ref, set } from './firebase-config.js';
+        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+        document.getElementById('regForm').onsubmit = (e) => {
+            e.preventDefault();
+            const email = document.getElementById('regEmail').value;
+            const pass = document.getElementById('regPass').value;
+            const name = document.getElementById('regName').value;
+            const role = document.getElementById('regRole').value;
+
+            createUserWithEmailAndPassword(auth, email, pass)
+                .then((userCredential) => {
+                    const uid = userCredential.user.uid;
+                    // حفظ بيانات العضو في الداتابيز
+                    set(ref(db, 'users/' + uid), {
+                        username: name,
+                        role: role,
+                        email: email
+                    });
+                    alert("تم التسجيل! يمكنك تسجيل الدخول الآن.");
+                    window.location.href = "login.html";
+                })
+                .catch(err => alert("خطأ: " + err.message));
+        };
+    </script>
+</body>
+</html>
