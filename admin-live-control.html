@@ -2,74 +2,36 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة التحكم العليا | الباك إيند</title>
-    <link rel="stylesheet" href="style.css">
+    <title>لوحة التحكم العليا</title>
+    <script src="https://100melion-production.up.railway.app/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <header class="main-header">
-        <div class="logo">الإدارة المركزية</div>
-    </header>
+    <h1>تحكم المنصة الرسمي</h1>
+    <input type="text" id="streamUrl" placeholder="رابط اليوتيوب هنا">
+    <button onclick="start()">تشغيل البث للكل</button>
+    <button onclick="stop()">إيقاف البث</button>
+    <h3 id="code">الكود الحالي: ------</h3>
+    <button onclick="newCode()">تغيير كود دخول المتدربين</button>
 
-    <div class="container">
-        <div class="card">
-            <h2>التحكم في البث المباشر (Real-time)</h2>
-            
-            <label>رابط البث (YouTube/Vimeo):</label>
-            <input type="text" id="streamUrl" placeholder="https://www.youtube.com/embed/..." style="margin-bottom: 20px;">
-            
-            <div style="display: flex; gap: 10px;">
-                <button id="btnStart" class="btn-submit" style="background: green;">بدء البث للجميع</button>
-                <button id="btnStop" class="btn-submit" style="background: red;">إيقاف البث</button>
-            </div>
-        </div>
+    <script>
+        const socket = io("https://100melion-production.up.railway.app");
 
-        <div class="card">
-            <h2>إدارة الأمان</h2>
-            <p>تغيير كود دخول المتدربين الحالي:</p>
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <h1 id="currentCodeDisp" style="color: var(--primary); margin: 0;">------</h1>
-                <button id="btnRefreshCode" class="btn-join">توليد كود جديد</button>
-            </div>
-        </div>
-
-        <div class="card">
-            <button id="btnClearChat" class="btn-join" style="background: #444; color: white;">مسح سجل الشات بالكامل</button>
-        </div>
-    </div>
-
-    <script type="module">
-        import { db, ref, set, update, remove, onValue } from './firebase-config.js';
-
-        // مراقبة الكود الحالي
-        onValue(ref(db, 'live_settings/current_access_code'), (snapshot) => {
-            document.getElementById('currentCodeDisp').innerText = snapshot.val() || "------";
+        socket.on('syncState', (state) => {
+            document.getElementById('code').innerText = "الكود الحالي: " + state.accessCode;
         });
 
-        // 1. بدء البث
-        document.getElementById('btnStart').onclick = () => {
+        function start() {
             const url = document.getElementById('streamUrl').value;
-            if(!url) return alert("ضع رابط البث أولاً");
-            update(ref(db, 'live_settings'), {
-                status: 'online',
-                url: url
-            }).then(() => alert("تم فتح البث لـ 100 مليون شاب!"));
-        };
+            socket.emit('adminCommand', { action: 'START_LIVE', url: url });
+        }
 
-        // 2. إيقاف البث
-        document.getElementById('btnStop').onclick = () => {
-            update(ref(db, 'live_settings'), { status: 'offline' });
-        };
+        function stop() {
+            socket.emit('adminCommand', { action: 'STOP_LIVE' });
+        }
 
-        // 3. تحديث الأكواد ريل تايم
-        document.getElementById('btnRefreshCode').onclick = () => {
-            const newCode = Math.floor(100000 + Math.random() * 900000);
-            update(ref(db, 'live_settings'), { current_access_code: newCode });
-        };
-
-        // 4. مسح الشات
-        document.getElementById('btnClearChat').onclick = () => {
-            if(confirm("هل تريد مسح الشات؟")) remove(ref(db, 'messages'));
-        };
+        function newCode() {
+            socket.emit('adminCommand', { action: 'REFRESH_CODE' });
+        }
     </script>
 </body>
 </html>
