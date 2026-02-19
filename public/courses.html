@@ -1,47 +1,46 @@
-<div class="container">
-    <h2 style="text-align:center; color:var(--primary);">لجان المبادرة والتخصصات التدريبية</h2>
-    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:25px;">
-        
-        <div class="card">
-            <div style="font-size:3rem;">🎨</div>
-            <h3>لجنة الثقافة والفنون</h3>
-            <p>دعم المؤلفين الشباب، الفنون التشكيلية، المسرح، والموسيقى لتعزيز الهوية العربية.</p>
-            <button onclick="book()" class="btn-submit">حجز مسار تدريبي</button>
-        </div>
-
-        <div class="card">
-            <div style="font-size:3rem;">🔬</div>
-            <h3>لجنة العلوم والبحث العلمي</h3>
-            <p>مناقشة رسائل الماجستير والدكتوراة ودعم الابتكارات العلمية للشباب العربي.</p>
-            <button onclick="book()" class="btn-submit">تقديم بحث</button>
-        </div>
-
-        <div class="card">
-            <div style="font-size:3rem;">💼</div>
-            <h3>لجنة ريادة الأعمال</h3>
-            <p>تمكين رواد الأعمال ودعم المشاريع الصغيرة والمتوسطة والإنتاجية.</p>
-            <button onclick="book()" class="btn-submit">دعم مشروعي</button>
-        </div>
-
-        <div class="card">
-            <div style="font-size:3rem;">⚖️</div>
-            <h3>لجنة التمكين السياسي</h3>
-            <p>تأهيل الشباب للمشاركة الواعية في الحياة العامة وصناعة القرار الاقتصادي والسياسي.</p>
-            <button onclick="book()" class="btn-submit">الالتحاق بالبرنامج</button>
-        </div>
-
-        <div class="card">
-            <div style="font-size:3rem;">📢</div>
-            <h3>لجنة الإعلام والتواصل</h3>
-            <p>نشر رسالة المبادرة وصناعة محتوى رقمي يخدم الـ 100 مليون شاب عربي.</p>
-            <button onclick="book()" class="btn-submit">انضم للفريق الإعلامي</button>
-        </div>
-
-        <div class="card">
-            <div style="font-size:3rem;">🌐</div>
-            <h3>لجنة العلاقات الدولية</h3>
-            <p>تعزيز ثقافة السلام والتبادل الشبابي بين الدول العربية والمؤسسات العالمية.</p>
-            <button onclick="book()" class="btn-submit">تواصل دولي</button>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأكاديمية الرقمية | بنكمل بعض</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css"> 
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; }
+        .container { max-width: 1200px; margin: 50px auto; padding: 20px; }
+        .header-title { text-align: center; color: #1e3a8a; margin-bottom: 40px; }
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .course-card { background: white; border-radius: 15px; padding: 25px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.3s; border-top: 5px solid #1e3a8a; }
+        .course-card:hover { transform: translateY(-10px); }
+        .course-card i { font-size: 3rem; color: #1e3a8a; margin-bottom: 15px; }
+        .btn-join { background: #1e3a8a; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 15px; }
+        .btn-join:hover { background: #ffd700; color: #1e3a8a; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header-title">لجان المبادرة والتخصصات التدريبية</h1>
+        <div class="courses-grid">
+            <div class="course-card">
+                <i class="fas fa-palette"></i>
+                <h3>لجنة الثقافة والفنون</h3>
+                <p>دعم المؤلفين الشباب، الفنون التشكيلية، والمسرح.</p>
+                <a href="#" class="btn-join">حجز مسار تدريبي</a>
+            </div>
+            <div class="course-card">
+                <i class="fas fa-microscope"></i>
+                <h3>لجنة العلوم والبحث العلمي</h3>
+                <p>مناقشة رسائل الماجستير والدكتوراه ودعم الابتكار.</p>
+                <a href="#" class="btn-join">تقديم بحث</a>
+            </div>
+            <div class="course-card">
+                <i class="fas fa-briefcase"></i>
+                <h3>لجنة ريادة الأعمال</h3>
+                <p>تمكين رواد الأعمال ودعم المشاريع الناشئة.</p>
+                <a href="#" class="btn-join">دعم مشروعي</a>
+            </div>
         </div>
     </div>
-</div>
+</body>
+</html>

@@ -2,51 +2,40 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>انضم لنا | التسجيل السحابي</title>
+    <title>انضم للمبادرة | تسجيل حساب</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .reg-container { max-width: 500px; margin: 80px auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .reg-container h2 { text-align: center; color: #1e3a8a; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .btn-submit { width: 100%; background: #1e3a8a; color: white; padding: 15px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; }
+        .btn-submit:hover { background: #ffd700; color: #1e3a8a; }
+    </style>
 </head>
 <body>
-    <div class="container" style="max-width: 450px;">
-        <div class="card">
-            <h2>إنشاء حساب في المبادرة</h2>
-            <form id="regForm">
-                <input type="text" id="regName" placeholder="الاسم الكامل" required>
-                <input type="email" id="regEmail" placeholder="البريد الإلكتروني" required>
-                <input type="password" id="regPass" placeholder="كلمة المرور" required>
-                <select id="regRole">
-                    <option value="student">متدرب</option>
-                    <option value="instructor">مدرب</option>
+    <div class="reg-container">
+        <h2>إنشاء حساب جديد</h2>
+        <form id="regForm">
+            <div class="form-group">
+                <label>الاسم الكامل</label>
+                <input type="text" placeholder="أدخل اسمك رباعي" required>
+            </div>
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" placeholder="example@mail.com" required>
+            </div>
+            <div class="form-group">
+                <label>نوع العضوية</label>
+                <select>
+                    <option>متدرب</option>
+                    <option>محاضر</option>
+                    <option>متطوع</option>
                 </select>
-                <button type="submit" class="btn-submit">إنشاء الحساب</button>
-            </form>
-        </div>
+            </div>
+            <button type="submit" class="btn-submit">إنشاء الحساب الآن</button>
+        </form>
     </div>
-
-    <script type="module">
-        import { auth, db, ref, set } from './firebase-config.js';
-        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
-        document.getElementById('regForm').onsubmit = (e) => {
-            e.preventDefault();
-            const email = document.getElementById('regEmail').value;
-            const pass = document.getElementById('regPass').value;
-            const name = document.getElementById('regName').value;
-            const role = document.getElementById('regRole').value;
-
-            createUserWithEmailAndPassword(auth, email, pass)
-                .then((userCredential) => {
-                    const uid = userCredential.user.uid;
-                    // حفظ بيانات العضو في الداتابيز
-                    set(ref(db, 'users/' + uid), {
-                        username: name,
-                        role: role,
-                        email: email
-                    });
-                    alert("تم التسجيل! يمكنك تسجيل الدخول الآن.");
-                    window.location.href = "login.html";
-                })
-                .catch(err => alert("خطأ: " + err.message));
-        };
-    </script>
 </body>
 </html>
