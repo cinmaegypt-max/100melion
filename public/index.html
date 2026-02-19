@@ -3,52 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مبادرة بنكمل بعض | البث المباشر</title>
+    <title>مبادرة "بنكمل بعض" | الرئيسية</title>
+    <link rel="stylesheet" href="style.css">
     <script src="/socket.io/socket.io.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f4f8; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        header { background: #1e3a8a; color: white; width: 100%; padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .live-container { background: white; margin-top: 30px; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 90%; max-width: 800px; text-align: center; }
-        #videoArea { background: #000; width: 100%; aspect-ratio: 16/9; border-radius: 10px; margin-top: 20px; display: flex; align-items: center; justify-content: center; color: #666; font-size: 1.2rem; }
-        .status-dot { height: 12px; width: 12px; background-color: #bbb; border-radius: 50%; display: inline-block; margin-left: 8px; }
-        .online .status-dot { background-color: #2ecc71; box-shadow: 0 0 10px #2ecc71; }
+        :root { --primary: #1e3a8a; --gold: #ffd700; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; color: #333; }
+        
+        /* الهيدر */
+        header { background: var(--primary); color: white; padding: 40px 20px; text-align: center; border-bottom: 5px solid var(--gold); }
+        .logo-text { font-size: 2.5rem; margin: 0; font-weight: bold; }
+        
+        /* قسم البث المباشر السريع */
+        .live-status-bar { background: #fff; padding: 15px; margin: -30px auto 20px; width: 80%; max-width: 600px; border-radius: 50px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .dot { height: 12px; width: 12px; border-radius: 50%; margin-left: 10px; }
+        .online-dot { background: #2ecc71; box-shadow: 0 0 10px #2ecc71; animation: blink 1s infinite; }
+        .offline-dot { background: #94a3b8; }
+
+        /* شبكة الخدمات */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 40px; max-width: 1200px; margin: auto; }
+        .card { background: white; padding: 30px; border-radius: 15px; text-align: center; transition: 0.3s; cursor: pointer; border: 1px solid #e2e8f0; text-decoration: none; color: inherit; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--primary); }
+        .card i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; display: block; }
+        .card h3 { margin: 10px 0; color: var(--primary); }
+
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>مبادرة "بنكمل بعض"</h1>
-        <p>المنصة الرسمية لبث الفعاليات لـ 100 مليون شاب</p>
+        <div class="logo-text">مبادرة "بنكمل بعض"</div>
+        <p>المنصة الرسمية لتمكين 100 مليون شاب عربي</p>
     </header>
 
-    <div class="live-container">
-        <div id="statusText" class="offline">
-            <span class="status-dot"></span>
-            <span id="label">البث متوقف حالياً</span>
-        </div>
-        
-        <div id="videoArea">
-            <div id="msg">بانتظار بدء البث من الإدارة...</div>
-        </div>
+    <div class="live-status-bar" id="statusBox">
+        <span id="dotStatus" class="dot offline-dot"></span>
+        <span id="textStatus">جاري فحص حالة البث...</span>
+    </div>
+
+    <div class="services-grid">
+        <a href="live.html" class="card">
+            <i>📺</i>
+            <h3>البث المباشر</h3>
+            <p>انضم الآن للمحاضرات واللقاءات الحية</p>
+        </a>
+
+        <a href="courses.html" class="card">
+            <i>🎓</i>
+            <h3>الأكاديمية الرقمية</h3>
+            <p>تصفح الدورات التدريبية المعتمدة</p>
+        </a>
+
+        <a href="register.html" class="card">
+            <i>📝</i>
+            <h3>انضم للمبادرة</h3>
+            <p>كن جزءاً من التغيير وسجل بياناتك</p>
+        </a>
+
+        <a href="admin-control.html" class="card" style="border-style: dashed;">
+            <i>⚙️</i>
+            <h3>إدارة المنصة</h3>
+            <p>خاص بالإدارة فقط</p>
+        </a>
     </div>
 
     <script>
-        // الربط بالسيرفر تلقائياً عبر اللينك الخاص بك
         const socket = io();
-
         socket.on('syncState', (state) => {
-            const videoArea = document.getElementById('videoArea');
-            const statusText = document.getElementById('statusText');
-            const label = document.getElementById('label');
-
+            const dot = document.getElementById('dotStatus');
+            const text = document.getElementById('textStatus');
             if(state.liveStatus === 'online') {
-                statusText.className = "online";
-                label.innerText = "بث مباشر الآن";
-                videoArea.innerHTML = `<iframe width="100%" height="100%" src="${state.streamUrl}" frameborder="0" allowfullscreen></iframe>`;
+                dot.className = "dot online-dot";
+                text.innerText = "بث مباشر الآن - اضغط للدخول";
+                text.style.color = "#166534";
             } else {
-                statusText.className = "offline";
-                label.innerText = "البث متوقف حالياً";
-                videoArea.innerHTML = '<div id="msg">بانتظار بدء البث من الإدارة...</div>';
+                dot.className = "dot offline-dot";
+                text.innerText = "لا يوجد بث حالياً";
+                text.style.color = "#64748b";
             }
         });
     </script>
