@@ -5,65 +5,52 @@ const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-
-// إعداد السوكيت مع حماية CORS
 const io = new Server(server, {
     cors: { origin: "*", methods: ["GET", "POST"] }
 });
 
-// --- إعدادات الحماية والأدمن ---
-const ADMIN_PASSWORD = "Mubdra_Admin_2026"; // 🔒 قم بتغيير كلمة السر هنا
+// 1. تحديد مكان المجلد العام
+const PUBLIC_PATH = path.join(__dirname, 'public');
 
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+// 2. السماح للسيرفر بقراءة أي ملف (CSS, JS, Images) جوه public
+app.use(express.static(PUBLIC_PATH));
 
-// مسار للتحقق من كلمة السر قبل دخول صفحة التحكم
-app.post('/admin-login', (req, res) => {
-    const { password } = req.body;
-    if (password === ADMIN_PASSWORD) {
-        res.json({ success: true });
-    } else {
-        res.status(401).json({ success: false, message: "كلمة المرور غير صحيحة" });
-    }
+// 3. كود سحري: لو حد طلب أي صفحة .html، السيرفر يفتحها من مجلد public
+app.get('/:page', (req, res) => {
+    const page = req.params.page;
+    res.sendFile(path.join(PUBLIC_PATH, page), (err) => {
+        if (err) {
+            res.status(404).send("عذراً، هذه الصفحة غير موجودة في المبادرة!");
+        }
+    });
 });
 
-// حالة النظام الحالية
+// 4. الصفحة الرئيسية الافتراضية
+app.get('/', (req, res) => {
+    res.sendFile(path.join(PUBLIC_PATH, 'index.html'));
+});
+
+// حالة النظام (البث المباشر)
 let systemState = {
     liveStatus: 'offline', 
     streamUrl: '',
-    accessCode: Math.floor(100000 + Math.random() * 900000).toString(),
-    chatEnabled: true
+    accessCode: '123456'
 };
 
 io.on('connection', (socket) => {
     socket.emit('syncState', systemState);
-
-    // استقبال أوامر الأدمن
     socket.on('adminCommand', (data) => {
-        // تحديث الحالة بناءً على الأوامر
         if (data.action === 'START_LIVE') {
             systemState.liveStatus = 'online';
             systemState.streamUrl = data.url;
         } else if (data.action === 'STOP_LIVE') {
             systemState.liveStatus = 'offline';
-        } else if (data.action === 'REFRESH_CODE') {
-            systemState.accessCode = Math.floor(100000 + Math.random() * 900000).toString();
         }
         io.emit('syncState', systemState);
-    });
-
-    socket.on('sendChatMessage', (msgData) => {
-        if (systemState.chatEnabled) {
-            io.emit('newChatMessage', {
-                user: msgData.user,
-                text: msgData.text,
-                time: new Date().toLocaleTimeString('ar-EG')
-            });
-        }
     });
 });
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`المنصة تعمل بأمان على بورت: ${PORT}`);
+    console.log(`المنصة تعمل بالكامل على بورت: ${PORT}`);
 });
