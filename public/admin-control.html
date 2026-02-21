@@ -2,65 +2,53 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تحكم الباك إيند | بنكمل بعض</title>
+    <title>لوحة التحكم | الإدارة</title>
     <link rel="stylesheet" href="style.css">
     <script src="/socket.io/socket.io.js"></script>
+    <style>
+        .admin-container { max-width: 800px; margin: 30px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .section { border-bottom: 1px solid #eee; padding: 20px 0; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        button { background: #1e3a8a; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+        button.stop { background: #e74c3c; }
+    </style>
 </head>
-<script>
-    const pass = prompt("الرجاء إدخال كلمة مرور الإدارة لدخول لوحة التحكم:");
-    
-    fetch('/admin-login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: pass })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (!data.success) {
-            alert("غير مسموح لك بالدخول!");
-            window.location.href = "/index.html"; // طرده للصفحة الرئيسية
-        }
-    });
-</script>
 <body>
-    <div class="container">
-        <div class="card">
-            <h2>لوحة قيادة البث المباشر (الآدمن)</h2>
-            <div style="margin-bottom: 20px;">
-                <label>رابط البث (YouTube Embed URL):</label>
-                <input type="text" id="streamUrlInput" placeholder="https://www.youtube.com/embed/...">
-            </div>
-            <button onclick="startLive()" class="btn-submit" style="background: green;">إطلاق البث للمنصة</button>
-            <button onclick="stopLive()" class="btn-submit" style="background: red; margin-top: 10px;">إيقاف البث فوراً</button>
+    <div class="admin-container">
+        <h2>🚀 لوحة التحكم في المنصة</h2>
+
+        <div class="section">
+            <h3>🎥 إدارة البث المباشر</h3>
+            <input type="text" id="liveUrl" placeholder="رابط فيديو اليوتيوب">
+            <button onclick="updateLive('online')">بدء البث</button>
+            <button class="stop" onclick="updateLive('offline')">إيقاف البث</button>
         </div>
 
-        <div class="card" style="background: #f0f4f8;">
-            <h3>إدارة الأكواد ريل تايم</h3>
-            <p>الكود الفعال حالياً لدخول المتدربين:</p>
-            <h1 id="liveCodeDisplay" style="color: blue; font-size: 3rem;">------</h1>
-            <button onclick="refreshCode()" class="btn-join">توليد كود دخول جديد</button>
+        <div class="section">
+            <h3>📢 شريط الأخبار العاجلة</h3>
+            <input type="text" id="tickerMsg" placeholder="اكتب الخبر الجديد هنا...">
+            <button onclick="updateTicker()">تحديث شريط الإعلانات</button>
+        </div>
+
+        <div class="section">
+            <h3>📝 نشر مقال/صورة جديدة</h3>
+            <input type="text" id="artTitle" placeholder="العنوان">
+            <textarea id="artContent" placeholder="المحتوى..."></textarea>
+            <button onclick="postArticle()">نشر في الموقع</button>
         </div>
     </div>
 
     <script>
         const socket = io();
-
-        socket.on('syncState', (state) => {
-            document.getElementById('liveCodeDisplay').innerText = state.accessCode;
-        });
-
-        function startLive() {
-            const url = document.getElementById('streamUrlInput').value;
-            if(!url) return alert("يرجى وضع رابط البث");
-            socket.emit('adminCommand', { action: 'START_LIVE', url: url });
+        function updateLive(status) {
+            const url = document.getElementById('liveUrl').value;
+            socket.emit('adminUpdate', { type: 'LIVE', status: status, url: url });
+            alert("تم تحديث حالة البث");
         }
-
-        function stopLive() {
-            socket.emit('adminCommand', { action: 'STOP_LIVE' });
-        }
-
-        function refreshCode() {
-            socket.emit('adminCommand', { action: 'REFRESH_CODE' });
+        function updateTicker() {
+            const msg = document.getElementById('tickerMsg').value;
+            socket.emit('adminUpdate', { type: 'TICKER', message: msg });
+            alert("تم تحديث شريط الأخبار");
         }
     </script>
 </body>

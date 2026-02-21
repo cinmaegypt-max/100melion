@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة التحكم الشاملة | مبادرة بنكمل بعض</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; }
+        .admin-box { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .section { margin-bottom: 30px; padding: 20px; border: 1px solid #eee; border-radius: 10px; }
+        h2 { color: #1e3a8a; border-bottom: 2px solid #ffd700; padding-bottom: 10px; }
+        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        button { background: #1e3a8a; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #ffd700; color: #1e3a8a; }
+        .btn-stop { background: #e74c3c; margin-right: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-box">
+        <h2>🚀 لوحة تحكم مدير المنصة</h2>
+
+        <div class="section">
+            <h3>📺 إدارة البث المباشر (يوتيوب)</h3>
+            <input type="text" id="streamUrl" placeholder="رابط الـ Embed الخاص بالفيديو">
+            <button onclick="updateLive('online')">بدء البث المباشر</button>
+            <button onclick="updateLive('offline')" class="btn-stop">إغلاق البث</button>
+        </div>
+
+        <div class="section">
+            <h3>📢 تحديث شريط الإعلانات العاجلة</h3>
+            <input type="text" id="tickerInput" placeholder="اكتب الخبر الجديد هنا...">
+            <button onclick="updateTicker()">تحديث الشريط فوراً</button>
+        </div>
+
+        <div class="section">
+            <h3>📝 نشر مقال أو صورة جديدة</h3>
+            <input type="text" id="artTitle" placeholder="عنوان المقال">
+            <textarea id="artDesc" rows="4" placeholder="محتوى المقال أو وصف الصورة..."></textarea>
+            <button onclick="postArticle()">نشر في قسم المعارض</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        
+        function updateLive(status) {
+            const url = document.getElementById('streamUrl').value;
+            socket.emit('adminUpdate', { type: 'LIVE', status: status, url: url });
+            alert('تم تحديث حالة البث بنجاح!');
+        }
+
+        function updateTicker() {
+            const msg = document.getElementById('tickerInput').value;
+            socket.emit('adminUpdate', { type: 'TICKER', message: msg });
+            alert('تم تحديث الشريط الإعلاني!');
+        }
+
+        function postArticle() {
+            const title = document.getElementById('artTitle').value;
+            const content = document.getElementById('artDesc').value;
+            socket.emit('adminUpdate', { 
+                type: 'ARTICLE', 
+                article: { title, content, date: new Date().toLocaleDateString('ar-EG') } 
+            });
+            alert('تم نشر المقال بنجاح!');
+        }
+    </script>
+</body>
+</html>
