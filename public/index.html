@@ -2,101 +2,62 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مبادرة بنكمل بعض | الرئيسية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="/socket.io/socket.io.js"></script>
     <style>
-        :root { --primary: #1e3a8a; --gold: #ffd700; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; overflow-x: hidden; }
-        
-        /* الشريط الإعلاني المتحرك */
-        .ticker-container { background: var(--gold); color: #1e3a8a; padding: 10px 0; font-weight: bold; white-space: nowrap; border-bottom: 2px solid var(--primary); }
-        .ticker-text { display: inline-block; animation: ticker 20s linear infinite; padding-right: 100%; }
+        /* الشريط الإعلاني */
+        .ticker-wrap { background: var(--accent); color: var(--primary); padding: 10px; font-weight: bold; overflow: hidden; white-space: nowrap; }
+        .ticker-text { display: inline-block; animation: ticker 20s linear infinite; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* الهيدر الذي أعجبك */
-        .main-header { background: linear-gradient(45deg, #1e3a8a, #3b5998); color: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .nav-links { list-style: none; display: flex; gap: 20px; }
-        .nav-links a { color: white; text-decoration: none; font-weight: bold; font-size: 1rem; }
-
-        /* البحث والبطاقة الرئيسية */
-        .hero-section { text-align: center; background: linear-gradient(45deg, #1e3a8a, #3b5998); color: white; padding: 60px 20px; border-radius: 0 0 50px 50px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .search-wrapper { margin-top: 25px; position: relative; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .search-wrapper input { width: 100%; padding: 15px 25px; border-radius: 30px; border: none; font-size: 1.1rem; outline: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        
-        /* شبكة الأقسام */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; padding: 40px; max-width: 1200px; margin: auto; }
-        .feature-card { background: white; padding: 30px; border-radius: 20px; text-align: center; text-decoration: none; color: #333; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 5px solid transparent; }
-        .feature-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-        .feature-card i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; }
-
-        /* حالة البث */
-        .live-indicator { display: inline-block; padding: 5px 15px; border-radius: 20px; background: #ddd; font-size: 0.8rem; margin-top: 10px; }
-        .status-online { background: #2ecc71; color: white; animation: blink 1s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        /* تنسيق شريط البحث */
+        .search-section { margin-top: 20px; display: flex; justify-content: center; gap: 10px; }
+        .search-section input { max-width: 400px; border-radius: 25px; padding: 10px 20px; border: none; }
+        .search-section button { background: var(--accent); border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
-
-    <div class="ticker-container">
-        <div class="ticker-text" id="tickerMsg">جاري تحميل آخر الأخبار والمستجدات...</div>
+    <div class="ticker-wrap">
+        <div class="ticker-text" id="tickerMsg">📢 مرحباً بكم في مبادرة بنكمل بعض.. تابعوا آخر التحديثات هنا</div>
     </div>
 
     <header class="main-header">
-        <div style="font-size: 1.8rem; font-weight: bold;">بنكمل بعض</div>
+        <div class="logo">بنكمل بعض</div>
         <nav>
-            <ul class="nav-links">
-                <li><a href="/index.html">الرئيسية</a></li>
-                <li><a href="/committees.html">اللجان</a></li>
-                <li><a href="/certificates.html">الشهادات</a></li>
-                <li><a href="/register.html">انضم لنا</a></li>
+            <ul class="nav-menu">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="courses.html">المنصة</a></li>
+                <li><a href="committees.html">اللجان</a></li>
+                <li><a href="certificates.html">الشهادات</a></li>
+                <li><a href="dashboard.html">لوحة التحكم</a></li>
+                <li><a href="register.html" class="btn-join">انضم لنا</a></li>
             </ul>
         </nav>
     </header>
 
-    <section class="hero-section">
-        <h1>مبادرة نشر الثقافة والعلوم لـ 100 مليون عربي</h1>
-        <div class="search-wrapper">
-            <input type="text" placeholder="ابحث عن المحاضرات، المدربين، أو اللجان...">
+    <div class="container">
+        <div class="card" style="text-align:center; background: linear-gradient(45deg, #1e3a8a, #3b5998); color: white; padding: 60px 20px;">
+            <h1>مبادرة نشر الثقافة والعلوم لـ 100 مليون عربي</h1>
+            <p style="font-size: 1.2rem;">نحو جيل عربي واعٍ، مثقف، ومبدع يقود التنمية السلام.</p>
+            
+            <div class="search-section">
+                <input type="text" placeholder="ابحث عن محاضرة أو لجنة...">
+                <button>بحث</button>
+            </div>
         </div>
-    </section>
 
-    <div class="grid-container">
-        <a href="/live.html" class="feature-card">
-            <i class="fas fa-satellite-dish"></i>
-            <h3>البث المباشر</h3>
-            <div id="liveStatus" class="live-indicator">مغلق الآن</div>
-        </a>
-        <a href="/courses.html" class="feature-card">
-            <i class="fas fa-graduation-cap"></i>
-            <h3>الأكاديمية</h3>
-            <p>كافة التخصصات واللجان</p>
-        </a>
-        <a href="/certificates.html" class="feature-card">
-            <i class="fas fa-file-signature"></i>
-            <h3>الشهادات</h3>
-            <p>استخرج شهادتك فوراً</p>
-        </a>
-        <a href="/dashboard.html" class="feature-card">
-            <i class="fas fa-tools"></i>
-            <h3>لوحة الإدارة</h3>
-            <p>إدارة المحتوى والبث</p>
-        </a>
+        <div class="card">
+            <h2>عن المبادرة</h2>
+            <p>تهدف مبادرة "بنكمل بعض" لتمكين الشباب العربي علمياً وثقافياً واقتصادياً من خلال توفير منصة تفاعلية تجمع بين التدريب، الإبداع، وريادة الأعمال.</p>
+        </div>
     </div>
 
     <script>
         const socket = io();
         socket.on('syncState', (state) => {
-            document.getElementById('tickerMsg').innerText = state.tickerMessage;
-            const live = document.getElementById('liveStatus');
-            if(state.liveStatus === 'online') {
-                live.innerText = "بث مباشر الآن";
-                live.classList.add('status-online');
-            } else {
-                live.innerText = "لا يوجد بث حالياً";
-                live.classList.remove('status-online');
+            if(state.tickerMessage) {
+                document.getElementById('tickerMsg').innerText = state.tickerMessage;
             }
         });
     </script>
