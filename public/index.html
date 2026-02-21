@@ -4,48 +4,42 @@
     <meta charset="UTF-8">
     <title>بنكمل بعض | الرئيسية</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <div class="ticker-wrap"><div class="ticker-text" id="tickerMsg">تحميل...</div></div>
-
+    <div class="ticker-wrap"><div class="ticker-text" id="tickerDisplay">.. جاري جلب الأخبار ..</div></div>
+    
     <header class="main-header">
         <div class="logo">بنكمل بعض</div>
         <nav>
             <ul class="nav-menu">
                 <li><a href="index.html">الرئيسية</a></li>
-                <li><a href="courses.html">المنصة</a></li>
                 <li><a href="profile.html">ملفي الشخصي</a></li>
-                <li><a href="register.html" class="btn-join">انضم لنا</a></li>
+                <li><a href="dashboard.html">الإدارة</a></li>
             </ul>
         </nav>
     </header>
 
-    <div class="container">
-        <div id="postsList">
-            </div>
-    </div>
+    <div class="container" id="feed">
+        </div>
 
     <script>
         const socket = io();
         socket.on('syncState', (state) => {
-            document.getElementById('tickerMsg').innerText = state.tickerMessage;
+            document.getElementById('tickerDisplay').innerText = state.tickerMessage;
             
-            const list = document.getElementById('postsList');
-            list.innerHTML = '';
+            const feed = document.getElementById('feed');
+            feed.innerHTML = '';
             
             state.articles.forEach(post => {
-                list.innerHTML += `
+                feed.innerHTML += `
                     <div class="card">
-                        <div style="display:flex; justify-content:space-between; color:#888; font-size:0.8rem;">
-                            <span>${post.date}</span>
-                        </div>
-                        <h2 style="margin:10px 0; color:#1e3a8a;">${post.title}</h2>
+                        <small style="color:gray;">${post.date}</small>
+                        <h2 style="color:var(--primary);">${post.title}</h2>
                         <p>${post.desc}</p>
-                        ${post.img ? `<img src="${post.img}" style="width:100%; border-radius:12px; margin-top:15px;">` : ''}
+                        ${post.img ? `<img src="${post.img}" style="width:100%; border-radius:10px; margin-top:10px;">` : ''}
                         ${post.video ? `
-                            <video controls style="width:100%; border-radius:12px; margin-top:15px; background:#000;">
+                            <video controls style="width:100%; border-radius:10px; margin-top:10px; background:black;">
                                 <source src="${post.video}" type="video/mp4">
                             </video>` : ''}
                     </div>

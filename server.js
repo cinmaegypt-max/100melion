@@ -11,14 +11,16 @@ const io = new Server(server);
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+// جعل مجلد الرفع متاحاً للعامة لرؤية الصور والفيديوهات
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// تأكد من إنشاء مجلد الرفع فوراً لمنع الخطأ في Railway
-const uploadDir = path.join(__dirname, 'uploads');
+// الكود السحري: إنشاء مجلد uploads تلقائياً إذا لم يكن موجوداً لمنع الـ Crash
+const uploadDir = './uploads';
 if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+    fs.mkdirSync(uploadDir);
 }
 
+// إعدادات التخزين
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, uploadDir),
     filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
@@ -33,6 +35,7 @@ let siteState = {
     articles: [] 
 };
 
+// استقبال المنشورات (صور وفيديو) من الجهاز
 app.post('/upload-content', upload.fields([{ name: 'image' }, { name: 'video' }]), (req, res) => {
     try {
         const { title, desc } = req.body;
@@ -44,11 +47,12 @@ app.post('/upload-content', upload.fields([{ name: 'image' }, { name: 'video' }]
             img: req.files['image'] ? `/uploads/${req.files['image'][0].filename}` : null,
             video: req.files['video'] ? `/uploads/${req.files['video'][0].filename}` : null
         };
+        
         siteState.articles.unshift(newPost);
         io.emit('syncState', siteState);
         res.json({ success: true });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
     }
 });
 
@@ -60,12 +64,5 @@ io.on('connection', (socket) => {
     });
 });
 
-app.get('/:page', (req, res) => {
-    const page = req.params.page.endsWith('.html') ? req.params.page : req.params.page + '.html';
-    res.sendFile(path.join(__dirname, 'public', page), (err) => {
-        if (err) res.status(404).send("الصفحة غير موجودة");
-    });
-});
-
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`Server: http://localhost:${PORT}`));
+server.listen(PORT, () => console.log(`السيرفر يعمل بنجاح على منفذ ${PORT}`));
