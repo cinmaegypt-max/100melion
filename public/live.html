@@ -15,6 +15,12 @@
 <body>
     <header class="main-header">
         <div class="logo">بنكمل بعض - مباشر</div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="profile.html">العودة للملف الشخصي</a></li>
+                <li><a href="courses.html">المنصة</a></li>
+            </ul>
+        </nav>
     </header>
 
     <div class="container">
@@ -25,14 +31,15 @@
         </div>
 
         <div id="liveView" class="live-grid" style="display: none;">
-            <div id="videoArea" class="card" style="background: black; height: 450px; color: white; display: flex; align-items: center; justify-content: center;">
-                بانتظار المدرب...
+            <div class="card" id="videoArea" style="height: 500px; background: black; display: flex; align-items: center; justify-content: center; color: white;">
+                <h3>جاري الاتصال بالبث...</h3>
             </div>
+            
             <div id="chatBox">
                 <div id="messages"></div>
-                <div style="padding: 10px; border-top: 1px solid #eee; display: flex;">
-                    <input type="text" id="chatInput" placeholder="اكتب سؤالك...">
-                    <button onclick="sendMsg()" style="background: var(--primary); color: white; border: none; padding: 0 10px;">إرسال</button>
+                <div style="padding: 10px; display: flex; gap: 5px;">
+                    <input type="text" id="chatInput" placeholder="اكتب سؤالك هنا...">
+                    <button onclick="sendMsg()" class="btn-submit" style="width: auto; padding: 10px;">إرسال</button>
                 </div>
             </div>
         </div>

@@ -15,7 +15,15 @@
 <body>
     <header class="main-header">
         <div class="logo">بنكمل بعض</div>
-        <nav><ul class="nav-menu"><li><a href="index.html">الرئيسية</a></li><li><a href="courses.html">المنصة</a></li></ul></nav>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="courses.html">المنصة</a></li>
+                <li><a href="profile.html">ملفي الشخصي</a></li>
+                <li><a href="certificates.html">الشهادات</a></li>
+                <li><a href="live.html" style="color:red;">🔴 البث المباشر</a></li>
+            </ul>
+        </nav>
     </header>
 
     <div class="profile-header">
@@ -55,9 +63,9 @@
                 document.getElementById('pName').innerText = userData.name;
                 document.getElementById('pRole').innerText = "تخصص: " + userData.role;
                 document.getElementById('pEmail').innerText = userData.email;
-                document.getElementById('regDate').innerText = userData.regDate;
+                document.getElementById('regDate').innerText = userData.regDate || new Date().toLocaleDateString();
             } else {
-                window.location.href = "register.html"; // إذا لم يسجل يرجعه لصفحة التسجيل
+                window.location.href = "register.html";
             }
         }
     </script>
