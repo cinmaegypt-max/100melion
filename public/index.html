@@ -2,59 +2,100 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مبادرة بنكمل بعض | الرئيسية</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="/socket.io/socket.io.js"></script>
     <style>
-        /* الشريط الإعلاني */
-        .ticker-wrap { background: var(--accent); color: var(--primary); padding: 10px; font-weight: bold; overflow: hidden; white-space: nowrap; }
-        .ticker-text { display: inline-block; animation: ticker 20s linear infinite; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        /* تنسيق الشريط الإعلاني المتحرك */
+        .ticker-wrap { 
+            background: var(--accent); 
+            color: var(--primary); 
+            padding: 10px 0; 
+            font-weight: bold; 
+            overflow: hidden; 
+            border-bottom: 2px solid var(--primary);
+        }
+        .ticker-text { 
+            display: inline-block; 
+            white-space: nowrap; 
+            padding-right: 100%; 
+            animation: ticker 25s linear infinite; 
+        }
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
 
-        /* تنسيق شريط البحث */
-        .search-section { margin-top: 20px; display: flex; justify-content: center; gap: 10px; }
-        .search-section input { max-width: 400px; border-radius: 25px; padding: 10px 20px; border: none; }
-        .search-section button { background: var(--accent); border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; }
+        /* تنسيق شريط البحث الفاخر */
+        .search-container {
+            margin: 25px auto;
+            max-width: 600px;
+            display: flex;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .search-container input {
+            flex: 1;
+            border: none;
+            padding: 15px 25px;
+            outline: none;
+            font-size: 1rem;
+        }
+        .search-container button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .search-container button:hover { background: var(--accent); color: var(--primary); }
     </style>
 </head>
 <body>
+
     <div class="ticker-wrap">
-        <div class="ticker-text" id="tickerMsg">📢 مرحباً بكم في مبادرة بنكمل بعض.. تابعوا آخر التحديثات هنا</div>
+        <div class="ticker-text" id="tickerMsg">📢 أهلاً بكم في المنصة الرسمية لمبادرة "بنكمل بعض".. تابعوا آخر الأخبار والفعاليات هنا لحظة بلحظة.</div>
     </div>
 
     <header class="main-header">
         <div class="logo">بنكمل بعض</div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="index.html">الرئيسية</a></li>
-                <li><a href="courses.html">المنصة</a></li>
-                <li><a href="committees.html">اللجان</a></li>
-                <li><a href="certificates.html">الشهادات</a></li>
-                <li><a href="dashboard.html">لوحة التحكم</a></li>
-                <li><a href="register.html" class="btn-join">انضم لنا</a></li>
+                <li><a href="/index.html">الرئيسية</a></li>
+                <li><a href="/courses.html">المنصة</a></li>
+                <li><a href="/committees.html">اللجان</a></li>
+                <li><a href="/certificates.html">الشهادات</a></li>
+                <li><a href="/dashboard.html">لوحة التحكم</a></li>
+                <li><a href="/register.html" class="btn-join">انضم لنا</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="container">
-        <div class="card" style="text-align:center; background: linear-gradient(45deg, #1e3a8a, #3b5998); color: white; padding: 60px 20px;">
+        <div class="card" style="text-align:center; background: linear-gradient(45deg, #1e3a8a, #3b5998); color: white; padding: 60px 20px; border-radius: 15px;">
             <h1>مبادرة نشر الثقافة والعلوم لـ 100 مليون عربي</h1>
-            <p style="font-size: 1.2rem;">نحو جيل عربي واعٍ، مثقف، ومبدع يقود التنمية السلام.</p>
+            <p style="font-size: 1.2rem; opacity: 0.9;">نحو جيل عربي واعٍ، مثقف، ومبدع يقود التنمية والسلام.</p>
             
-            <div class="search-section">
-                <input type="text" placeholder="ابحث عن محاضرة أو لجنة...">
-                <button>بحث</button>
+            <div class="search-container">
+                <input type="text" placeholder="ابحث عن لجنة، محاضرة، أو تخصص...">
+                <button><i class="fas fa-search"></i> بحث</button>
             </div>
         </div>
 
         <div class="card">
-            <h2>عن المبادرة</h2>
-            <p>تهدف مبادرة "بنكمل بعض" لتمكين الشباب العربي علمياً وثقافياً واقتصادياً من خلال توفير منصة تفاعلية تجمع بين التدريب، الإبداع، وريادة الأعمال.</p>
+            <h2>رؤية المنصة</h2>
+            <p>نعمل في "بنكمل بعض" على توفير بيئة تعليمية تفاعلية تهدف إلى ربط الشباب العربي بالعلوم الحديثة ومهارات ريادة الأعمال لتمكينهم في سوق العمل العالمي.</p>
         </div>
     </div>
 
     <script>
         const socket = io();
+        // استقبال تحديثات الشريط الإعلاني من لوحة التحكم
         socket.on('syncState', (state) => {
             if(state.tickerMessage) {
                 document.getElementById('tickerMsg').innerText = state.tickerMessage;
