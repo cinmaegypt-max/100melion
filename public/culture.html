@@ -5,12 +5,13 @@
     <title>لجنة الثقافة والفنون | بنكمل بعض</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .hero-section { background: #ffd700; color: #1e3a8a; padding: 60px 20px; text-align: center; }
+        .hero { background: #ffd700; color: #1e3a8a; padding: 60px 20px; text-align: center; }
         .culture-card { max-width: 600px; margin: -50px auto 50px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        #successMsg { display: none; color: #2ecc71; font-weight: bold; text-align: center; margin-top: 20px; padding: 15px; border: 1px solid #2ecc71; border-radius: 8px; }
     </style>
 </head>
 <body>
-    <div class="hero-section">
+    <div class="hero">
         <h1>لجنة الثقافة والفنون</h1>
         <p>نحتفي بالإبداع والمبدعين</p>
     </div>
@@ -24,9 +25,9 @@
                 <li>نشر الوعي بالهوية الثقافية العربية.</li>
             </ul>
 
-            <form>
+            <form id="cultureForm">
                 <label>اختر المسار التدريبي:</label>
-                <select required>
+                <select id="courseSelect" required>
                     <option value="">-- اختر المسار --</option>
                     <option>الكتابة الإبداعية</option>
                     <option>الفنون التشكيلية</option>
@@ -34,7 +35,16 @@
                 </select>
                 <button type="submit" class="btn-submit">انضم للمسار التدريبي الآن</button>
             </form>
+            <div id="successMsg">🎉 تم تسجيلك في المسار بنجاح! سيتم التواصل معك عبر البريد الإلكتروني.</div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('cultureForm').onsubmit = function(e) {
+            e.preventDefault(); // هذا السطر يمنع الصفحة من إغلاق نفسها وإعادة التحميل
+            this.style.display = 'none'; // إخفاء النموذج
+            document.getElementById('successMsg').style.display = 'block'; // إظهار رسالة النجاح
+        };
+    </script>
 </body>
 </html>
