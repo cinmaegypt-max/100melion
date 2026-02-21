@@ -5,23 +5,38 @@
     <title>لجنة ريادة الأعمال | بنكمل بعض</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .hero { background: #1e3a8a; color: white; padding: 50px; text-align: center; border-radius: 0 0 20px 20px; }
-        .content { max-width: 800px; margin: 30px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .hero-section { background: #1e3a8a; color: white; padding: 60px 20px; text-align: center; }
+        .form-card { max-width: 600px; margin: -50px auto 50px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .btn-submit { background: #ffd700; color: #1e3a8a; font-weight: bold; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="hero">
+    <div class="hero-section">
         <h1>لجنة ريادة الأعمال</h1>
         <p>ندعم حلمك ليصبح مشروعاً واقعياً</p>
     </div>
-    <div class="content">
-        <h2>أهداف اللجنة:</h2>
-        <ul>
-            <li>تمويل المشاريع الصغيرة والمتوسطة.</li>
-            <li>تدريب 100 ألف رائد أعمال عربي.</li>
-            <li>توفير استشارات قانونية وفنية للمشاريع الناشئة.</li>
-        </ul>
-        <button onclick="alert('سجل بيانات مشروعك سيتم التواصل معك قريباً')">تقديم طلب دعم مشروع</button>
+
+    <div class="container">
+        <div class="form-card">
+            <h3>أهداف اللجنة المتاحة لك:</h3>
+            <ul style="margin-bottom: 25px; color: #555;">
+                <li>تمويل المشاريع الصغيرة والمتوسطة.</li>
+                <li>تدريب 100 ألف رائد أعمال عربي.</li>
+                <li>توفير استشارات قانونية وفنية للمشاريع.</li>
+            </ul>
+            
+            <form id="businessForm">
+                <input type="text" placeholder="اسم المشروع" required>
+                <textarea placeholder="شرح مختصر لفكرة المشروع" rows="4" required></textarea>
+                <button type="submit" class="btn-submit">تقديم طلب دعم المشروع</button>
+            </form>
+        </div>
     </div>
+    <script>
+        document.getElementById('businessForm').onsubmit = (e) => {
+            e.preventDefault();
+            alert('تم استلام فكرة مشروعك بنجاح! سيقوم مستشارونا بالتواصل معك قريباً.');
+        };
+    </script>
 </body>
 </html>

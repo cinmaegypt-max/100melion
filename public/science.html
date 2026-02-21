@@ -5,23 +5,33 @@
     <title>لجنة العلوم والبحث العلمي | بنكمل بعض</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .hero { background: #2ecc71; color: white; padding: 50px; text-align: center; border-radius: 0 0 20px 20px; }
-        .content { max-width: 800px; margin: 30px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .hero-section { background: #2ecc71; color: white; padding: 60px 20px; text-align: center; }
+        .upload-box { border: 2px dashed #2ecc71; padding: 40px; text-align: center; border-radius: 15px; margin-top: 20px; }
+        .science-card { max-width: 700px; margin: -50px auto 50px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
-    <div class="hero">
+    <div class="hero-section">
         <h1>لجنة العلوم والبحث العلمي</h1>
         <p>منصة الباحثين والمبتكرين العرب</p>
     </div>
-    <div class="content">
-        <h2>ما نقدمه للباحثين:</h2>
-        <ul>
-            <li>مناقشة ونشر أبحاث الماجستير والدكتوراه.</li>
-            <li>دعم الابتكارات التقنية وبراءات الاختراع.</li>
-            <li>ربط الباحثين بالمؤسسات العلمية العالمية.</li>
-        </ul>
-        <button onclick="alert('ارفع ملف بحثك بصيغة PDF هنا')">تقديم بحث علمي</button>
+
+    <div class="container">
+        <div class="science-card">
+            <h3>ما نقدمه للباحثين:</h3>
+            <ul style="color: #555; margin-bottom: 20px;">
+                <li>مناقشة ونشر أبحاث الماجستير والدكتوراه.</li>
+                <li>دعم الابتكارات التقنية وبراءات الاختراع.</li>
+                <li>ربط الباحثين بالمؤسسات العلمية العالمية.</li>
+            </ul>
+
+            <div class="upload-box">
+                <i class="fas fa-file-pdf fa-3x" style="color: #2ecc71; margin-bottom: 15px;"></i>
+                <p>ارفع ملف بحثك بصيغة PDF هنا</p>
+                <input type="file" id="researchFile" accept=".pdf" style="display: none;">
+                <button onclick="document.getElementById('researchFile').click()" class="btn-submit" style="background: #2ecc71;">اختر الملف</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>
