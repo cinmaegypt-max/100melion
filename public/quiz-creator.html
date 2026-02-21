@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة الاختبارات</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card" id="quizCreator">
+            <h2>إنشاء نموذج اختبار (للمدربين)</h2>
+            <input type="text" placeholder="عنوان الاختبار">
+            <div id="questions"></div>
+            <button class="btn-main" onclick="addQ()">إضافة سؤال +</button>
+            <button class="btn-main" style="background:#28a745; color:white;">نشر الاختبار</button>
+        </div>
+    </div>
+    <script>
+        function addQ() {
+            const div = document.createElement('div');
+            div.innerHTML = `<div class="card" style="background:#f1f1f1;"><input placeholder="السؤال"><input placeholder="الإجابة الصحيحة"></div>`;
+            document.getElementById('questions').appendChild(div);
+        }
+    </script>
+</body>
+</html>

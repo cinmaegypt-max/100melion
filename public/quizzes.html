@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>منصة التقييم | بنكمل بعض</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">اختبارات المبادرة</div>
+        <nav><ul class="nav-menu"><li><a href="dashboard.html">العودة للوحة التحكم</a></li></ul></nav>
+    </header>
+
+    <div class="container">
+        <div id="instructorQuizView" class="card instructor-only hidden" style="border-top: 5px solid #2ed573;">
+            <h2><i class="fas fa-edit"></i> إنشاء اختبار جديد (للمدربين)</h2>
+            <input type="text" id="quizTitle" placeholder="عنوان الاختبار (مثلاً: أساسيات ريادة الأعمال)">
+            <div id="questionsArea"></div>
+            <button onclick="addQuestionField()" class="btn-join" style="background:#2ed573;">+ إضافة سؤال</button>
+            <button onclick="publishQuiz()" class="btn-submit" style="margin-top:10px;">نشر الاختبار للمتدربين</button>
+        </div>
+
+        <div id="studentQuizView" class="card student-only">
+            <h2><i class="fas fa-pen-fancy"></i> الاختبارات المتاحة</h2>
+            <div class="card" style="background: #f9f9f9;">
+                <h4>اختبار لجنة العلوم (المستوى الأول)</h4>
+                <p>مدة الاختبار: 15 دقيقة</p>
+                <button class="btn-main" onclick="startQuiz()">ابدأ الاختبار الآن</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addQuestionField() {
+            const area = document.getElementById('questionsArea');
+            const qDiv = document.createElement('div');
+            qDiv.className = 'card';
+            qDiv.style.background = '#f1f1f1';
+            qDiv.innerHTML = `<input placeholder="السؤال"><input placeholder="الإجابة الصحيحة">`;
+            area.appendChild(qDiv);
+        }
+
+        function publishQuiz() {
+            alert("تم نشر الاختبار بنجاح! سيظهر لجميع المتدربين في لجننتك.");
+        }
+
+        window.onload = function() {
+            const role = localStorage.getItem('userRole');
+            if(role === 'instructor' || role === 'admin') {
+                document.getElementById('instructorQuizView').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

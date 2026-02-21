@@ -2,30 +2,72 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>اللجان التنفيذية | بنكمل بعض</title>
+    <title>لجان المبادرة | بنكمل بعض</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .committee-box { border-right: 10px solid var(--primary); padding-right: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .header-title { background: #1e3a8a; color: white; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 30px; }
+        .committee-list { max-width: 900px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
+        
+        /* التعديل هنا: جعل الكارت بالكامل رابط قابل للضغط */
+        .committee-card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 15px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            text-decoration: none; /* إزالة الخط تحت الرابط */
+            color: #333;
+            transition: 0.3s;
+            border-right: 8px solid #1e3a8a;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .committee-card:hover { 
+            transform: scale(1.02); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .committee-card.green { border-right-color: #2ecc71; }
+        .committee-card.gold { border-right-color: #ffd700; }
+
+        .info h3 { margin: 0 0 10px 0; color: #1e3a8a; font-size: 1.4rem; }
+        .info p { margin: 0; color: #666; font-size: 1rem; }
+        .number { font-size: 2rem; font-weight: bold; color: #ddd; }
     </style>
 </head>
 <body>
-    <header class="main-header">
-        <div class="logo">لجان المبادرة</div>
-    </header>
 
-    <div class="container">
-        <div class="committee-box card">
-            <h2>1. لجنة الثقافة والفنون</h2>
-            <p>المسؤولية: دعم المؤلفين الشباب، مهرجان "سلام عربي"، والتبادل الثقافي.</p>
-        </div>
-        <div class="committee-box card" style="border-color: #2ed573;">
-            <h2>2. لجنة العلوم والبحث</h2>
-            <p>المسؤولية: مناقشة أبحاث الماجستير والدكتوراه، الابتكار التقني.</p>
-        </div>
-        <div class="committee-box card" style="border-color: #ffa502;">
-            <h2>3. لجنة ريادة الأعمال</h2>
-            <p>المسؤولية: تمويل المشاريع الصغيرة، تدريب 100 ألف رائد أعمال.</p>
-        </div>
-        </div>
+    <div class="header-title">
+        <h1>لجان المبادرة التنفيذية</h1>
+    </div>
+
+    <div class="committee-list">
+        <a href="/culture.html" class="committee-card">
+            <div class="info">
+                <h3>1. لجنة الثقافة والفنون</h3>
+                <p>المسؤولية: دعم المؤلفين الشباب، مهرجان "سلام عربي"، والتبادل الثقافي.</p>
+            </div>
+            <div class="number">01</div>
+        </a>
+
+        <a href="/science.html" class="committee-card green">
+            <div class="info">
+                <h3>2. لجنة العلوم والبحث العلمي</h3>
+                <p>المسؤولية: مناقشة أبحاث الماجستير والدكتوراه، الابتكار التقني.</p>
+            </div>
+            <div class="number">02</div>
+        </a>
+
+        <a href="/business.html" class="committee-card gold">
+            <div class="info">
+                <h3>3. لجنة ريادة الأعمال</h3>
+                <p>المسؤولية: تمويل المشاريع الصغيرة، تدريب 100 ألف رائد أعمال.</p>
+            </div>
+            <div class="number">03</div>
+        </a>
+    </div>
+
 </body>
 </html>

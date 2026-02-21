@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تسجيل الدخول</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">بنكمل بعض</div>
+        <nav><ul class="nav-menu"><li><a href="index.html">الرئيسية</a></li></ul></nav>
+    </header>
+
+    <div class="container" style="max-width: 450px;">
+        <div class="card">
+            <h2 style="text-align:center;">دخول المنصة</h2>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required>
+                <input type="password" placeholder="كلمة المرور" required>
+                <button type="submit" class="btn-submit">دخول</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').onsubmit = function(e) {
+            e.preventDefault();
+            const stored = JSON.parse(localStorage.getItem('userData'));
+            const email = document.getElementById('loginEmail').value;
+
+            if(stored && email === stored.email) {
+                localStorage.setItem('userRole', stored.role);
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href = 'dashboard.html';
+            } else if(email === "admin@admin.com") {
+                localStorage.setItem('userRole', 'admin');
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('البيانات غير صحيحة أو الحساب غير موجود');
+            }
+        };
+    </script>
+</body>
+</html>
