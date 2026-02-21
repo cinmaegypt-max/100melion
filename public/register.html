@@ -2,40 +2,49 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>انضم للمبادرة | تسجيل حساب</title>
+    <title>انضم لنا | بنكمل بعض</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .reg-container { max-width: 500px; margin: 80px auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .reg-container h2 { text-align: center; color: #1e3a8a; margin-bottom: 30px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn-submit { width: 100%; background: #1e3a8a; color: white; padding: 15px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; }
-        .btn-submit:hover { background: #ffd700; color: #1e3a8a; }
-    </style>
 </head>
 <body>
-    <div class="reg-container">
-        <h2>إنشاء حساب جديد</h2>
-        <form id="regForm">
-            <div class="form-group">
-                <label>الاسم الكامل</label>
-                <input type="text" placeholder="أدخل اسمك رباعي" required>
-            </div>
-            <div class="form-group">
-                <label>البريد الإلكتروني</label>
-                <input type="email" placeholder="example@mail.com" required>
-            </div>
-            <div class="form-group">
-                <label>نوع العضوية</label>
-                <select>
-                    <option>متدرب</option>
-                    <option>محاضر</option>
-                    <option>متطوع</option>
+    <header class="main-header">
+        <div class="logo">بنكمل بعض</div>
+    </header>
+
+    <div class="container">
+        <div class="card" style="max-width: 500px; margin: auto;">
+            <h2>إنشاء حساب عضوية</h2>
+            <form id="registrationForm">
+                <input type="text" id="userName" placeholder="الاسم الرباعي كما في البطاقة" required>
+                <input type="email" id="userEmail" placeholder="البريد الإلكتروني" required>
+                <select id="userRole" required>
+                    <option value="">اختر التخصص</option>
+                    <option value="ريادة الأعمال">ريادة الأعمال</option>
+                    <option value="البحث العلمي">البحث العلمي</option>
+                    <option value="الثقافة والفنون">الثقافة والفنون</option>
                 </select>
-            </div>
-            <button type="submit" class="btn-submit">إنشاء الحساب الآن</button>
-        </form>
+                <button type="submit" class="btn-submit">إنشاء الحساب ودخول البروفايل</button>
+            </form>
+        </div>
     </div>
+
+    <script>
+        document.getElementById('registrationForm').onsubmit = function(e) {
+            e.preventDefault();
+            
+            // حفظ البيانات في ذاكرة المتصفح
+            const userData = {
+                name: document.getElementById('userName').value,
+                role: document.getElementById('userRole').value,
+                email: document.getElementById('userEmail').value,
+                regDate: new Date().toLocaleDateString()
+            };
+
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+            // التوجيه التلقائي
+            alert('أهلاً بك في المبادرة! جاري تجهيز ملفك الشخصي...');
+            window.location.href = "profile.html";
+        };
+    </script>
 </body>
 </html>
