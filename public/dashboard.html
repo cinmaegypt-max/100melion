@@ -8,14 +8,12 @@
     <script src="/socket.io/socket.io.js"></script>
     <style>
         .admin-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
-        .sidebar { background: #1e3a8a; color: white; padding: 25px; }
+        .sidebar { background: var(--primary); color: white; padding: 25px; }
         .nav-btn { padding: 15px; margin-bottom: 10px; cursor: pointer; border-radius: 10px; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
-        .nav-btn:hover, .nav-btn.active { background: #ffd700; color: #1e3a8a; }
+        .nav-btn.active { background: var(--accent); color: var(--primary); font-weight: bold; }
         .main-view { padding: 40px; background: #f8f9fa; }
         .tab { display: none; } .tab.active { display: block; }
-        form label { display: block; margin-top: 15px; font-weight: bold; }
-        .progress-bar { height: 10px; background: #eee; border-radius: 5px; margin-top: 10px; display: none; overflow: hidden; }
-        .progress-fill { height: 100%; background: #2ecc71; width: 0%; transition: 0.2s; }
+        input, textarea { margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -29,36 +27,30 @@
 
         <div class="main-view">
             <div id="publishTab" class="tab active card">
-                <h3>نشر مقال / فيديو / صور من الجهاز</h3>
+                <h3>رفع فيديو وصور للمنصة</h3>
                 <form id="contentForm">
-                    <input type="text" id="title" name="title" placeholder="عنوان المنشور" required>
-                    <textarea id="desc" name="desc" placeholder="نص المقال أو وصف الفيديو"></textarea>
-                    
-                    <label>ارفق صورة:</label>
+                    <input type="text" name="title" placeholder="عنوان المنشور" required>
+                    <textarea name="desc" placeholder="وصف المحتوى"></textarea>
+                    <label>صورة المنشور:</label>
                     <input type="file" name="image" accept="image/*">
-                    
-                    <label>ارفق فيديو:</label>
+                    <label>فيديو المنشور:</label>
                     <input type="file" name="video" accept="video/*">
-                    
-                    <button type="button" class="btn-submit" onclick="submitContent()">نشر الآن</button>
-                    <div class="progress-bar" id="pBar"><div class="progress-fill" id="pFill"></div></div>
+                    <button type="button" class="btn-submit" onclick="submitContent()">بدء الرفع والنشر</button>
+                    <p id="statusMsg" style="margin-top:10px; color:blue; display:none;">جاري الرفع... يرجى الانتظار</p>
                 </form>
             </div>
 
             <div id="liveTab" class="tab card">
-                <h3>إعدادات البث المباشر</h3>
-                <label>حالة البث:</label>
+                <h3>إعدادات البث</h3>
                 <select id="lStatus"><option value="online">مباشر</option><option value="offline">متوقف</option></select>
-                <label>رابط YouTube Embed:</label>
-                <input type="text" id="lUrl" placeholder="https://www.youtube.com/embed/...">
-                <label>كود دخول المحاضرة:</label>
-                <input type="text" id="lCode" placeholder="998877">
-                <button class="btn-submit" onclick="updateLive()">حفظ الإعدادات</button>
+                <input type="text" id="lUrl" placeholder="رابط YouTube Embed">
+                <input type="text" id="lCode" placeholder="كود دخول البث">
+                <button class="btn-submit" onclick="updateLive()">حفظ</button>
             </div>
-
+            
             <div id="newsTab" class="tab card">
-                <h3>تحديث شريط الأخبار</h3>
-                <textarea id="tMsg" rows="4"></textarea>
+                <h3>تحديث الشريط الإعلاني</h3>
+                <textarea id="tMsg" placeholder="اكتب الخبر هنا"></textarea>
                 <button class="btn-submit" onclick="updateTicker()">تحديث</button>
             </div>
         </div>
@@ -76,16 +68,14 @@
         async function submitContent() {
             const form = document.getElementById('contentForm');
             const formData = new FormData(form);
-            const pBar = document.getElementById('pBar');
-            const pFill = document.getElementById('pFill');
-
-            pBar.style.display = 'block';
-            pFill.style.width = '50%'; // وهمي لتبسيط الكود
+            const status = document.getElementById('statusMsg');
+            status.style.display = 'block';
 
             const res = await fetch('/upload-content', { method: 'POST', body: formData });
             if (res.ok) {
-                pFill.style.width = '100%';
-                setTimeout(() => { alert("تم النشر!"); pBar.style.display = 'none'; form.reset(); }, 500);
+                alert("تم النشر بنجاح!");
+                form.reset();
+                status.style.display = 'none';
             }
         }
 
@@ -95,12 +85,12 @@
                 streamUrl: document.getElementById('lUrl').value,
                 accessCode: document.getElementById('lCode').value
             });
-            alert("تم تحديث البث");
+            alert("تم التحديث");
         }
 
         function updateTicker() {
             socket.emit('updateState', { tickerMessage: document.getElementById('tMsg').value });
-            alert("تم تحديث الخبر");
+            alert("تم التحديث");
         }
     </script>
 </body>
