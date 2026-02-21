@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>معرض المنتجات | بنكمل بعض</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">معرض بنكمل بعض</div>
+        <nav><ul class="nav-menu">
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="dashboard.html">لوحة التحكم</a></li>
+        </ul></nav>
+    </header>
+
+    <div class="container">
+        <div class="card" style="background: var(--accent); color: #000; text-align: center;">
+            <h2>سوق الشباب العربي المنتج</h2>
+            <p>ندعم الصناعة اليدوية، الكتب، والابتكارات التقنية لشباب المبادرة.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+            <div class="card">
+                <div style="height: 200px; background: #eee; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center;">صورة المنتج</div>
+                <h4>حقائب جلدية صناعة يدوية</h4>
+                <p>بواسطة: مبدعون من المغرب</p>
+                <button class="btn-submit">طلب المنتج</button>
+            </div>
+            <div class="card">
+                <div style="height: 200px; background: #eee; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center;">صورة الكتاب</div>
+                <h4>كتاب: نهضة جيل</h4>
+                <p>تأليف: مؤلف شبابي مصري</p>
+                <button class="btn-submit">شراء النسخة الرقمية</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
