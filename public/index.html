@@ -5,60 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مبادرة "بنكمل بعض" | الرئيسية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
     <script src="/socket.io/socket.io.js"></script>
     <style>
         :root { --primary: #1e3a8a; --gold: #ffd700; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; color: #333; }
         
-        /* القائمة العلوية الجديدة (Navbar) */
-        nav { background: #fff; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        nav .nav-links { display: flex; gap: 20px; }
-        nav a { text-decoration: none; color: var(--primary); font-weight: bold; transition: 0.3s; }
-        nav a:hover { color: #d4af37; }
+        /* شريط التنقل العلوي */
+        nav { background: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .nav-links a { text-decoration: none; color: var(--primary); font-weight: bold; margin-right: 20px; transition: 0.3s; }
+        .nav-links a:hover { color: #d4af37; }
 
-        /* الهيدر */
-        header { background: var(--primary); color: white; padding: 60px 20px; text-align: center; border-bottom: 5px solid var(--gold); }
-        .logo-text { font-size: 2.8rem; margin: 0; font-weight: bold; }
+        header { background: var(--primary); color: white; padding: 50px 20px; text-align: center; border-bottom: 5px solid var(--gold); }
         
-        /* شريط حالة البث المباشر */
-        .live-status-bar { background: #fff; padding: 15px; margin: -30px auto 20px; width: 85%; max-width: 600px; border-radius: 50px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #eee; }
-        .dot { height: 12px; width: 12px; border-radius: 50%; margin-left: 10px; }
-        .online-dot { background: #2ecc71; box-shadow: 0 0 10px #2ecc71; animation: blink 1s infinite; }
+        /* شريط حالة البث */
+        .live-status-bar { background: #fff; padding: 12px; margin: -25px auto 20px; width: 80%; max-width: 500px; border-radius: 50px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #eee; }
+        .dot { height: 10px; width: 10px; border-radius: 50%; margin-left: 10px; }
+        .online-dot { background: #2ecc71; box-shadow: 0 0 8px #2ecc71; animation: blink 1s infinite; }
         .offline-dot { background: #94a3b8; }
 
-        /* شبكة الخدمات (الكروت) */
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 40px; max-width: 1200px; margin: auto; }
-        .card { background: white; padding: 30px; border-radius: 15px; text-align: center; transition: 0.3s; cursor: pointer; border: 1px solid #e2e8f0; text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--primary); }
-        .card i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; }
-        .card h3 { margin: 10px 0; color: var(--primary); font-size: 1.4rem; }
-
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        /* شبكة الكروت */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 40px; max-width: 1200px; margin: auto; }
+        .card { background: white; padding: 25px; border-radius: 15px; text-align: center; transition: 0.3s; cursor: pointer; border: 1px solid #e2e8f0; text-decoration: none; color: inherit; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); border-color: var(--primary); }
+        .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; display: block; }
         
-        /* قسم "عن المبادرة" المسترجع من الاندكس القديم */
-        .about-section { padding: 60px 20px; background: white; text-align: center; margin-top: 40px; }
-        .about-container { max-width: 800px; margin: auto; }
-        .about-section h2 { color: var(--primary); font-size: 2rem; margin-bottom: 20px; }
-        .about-section p { line-height: 1.8; color: #555; font-size: 1.1rem; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><strong>بنكمل بعض</strong></div>
+        <div class="logo"><strong>مبادرة بنكمل بعض</strong></div>
         <div class="nav-links">
             <a href="/index.html">الرئيسية</a>
             <a href="/committees.html">اللجان</a>
             <a href="/certificates.html">الشهادات</a>
-            <a href="/structure.html">الهيكل التنظيمي</a>
             <a href="/contact.html">تواصل معنا</a>
         </div>
     </nav>
 
     <header>
-        <div class="logo-text">مبادرة "بنكمل بعض"</div>
-        <p>المنصة الرسمية لتمكين 100 مليون شاب عربي</p>
+        <div style="font-size: 2.2rem; font-weight: bold;">المنصة الرسمية للمبادرة</div>
+        <p>نحو جيل عربي واعٍ ومبدع</p>
     </header>
 
     <div class="live-status-bar" id="statusBox">
@@ -68,45 +57,29 @@
 
     <div class="services-grid">
         <a href="/live.html" class="card">
-            <i class="fas fa-tv"></i>
+            <i class="fas fa-video"></i>
             <h3>البث المباشر</h3>
-            <p>شاهد المحاضرات واللقاءات الحية الآن</p>
+            <p>انضم الآن للمحاضرات الحية</p>
         </a>
 
         <a href="/courses.html" class="card">
-            <i class="fas fa-graduation-cap"></i>
-            <h3>الأكاديمية الرقمية</h3>
-            <p>تصفح التخصصات واللجان التدريبية</p>
+            <i class="fas fa-university"></i>
+            <h3>اللجان التدريبية</h3>
+            <p>تصفح التخصصات المتاحة</p>
         </a>
 
         <a href="/register.html" class="card">
             <i class="fas fa-user-plus"></i>
-            <h3>انضم للمبادرة</h3>
-            <p>سجل بياناتك كمتدرب أو متطوع</p>
+            <h3>انضمام للمبادرة</h3>
+            <p>سجل بياناتك كعضو جديد</p>
         </a>
 
         <a href="/certificates.html" class="card">
-            <i class="fas fa-certificate"></i>
-            <h3>استخراج الشهادات</h3>
-            <p>احصل على شهاداتك المعتمدة إلكترونياً</p>
-        </a>
-        
-        <a href="/admin-control.html" class="card" style="border: 2px dashed #ccc; opacity: 0.8;">
-            <i class="fas fa-user-shield"></i>
-            <h3>إدارة المنصة</h3>
-            <p>لوحة التحكم (خاص بالإدارة)</p>
+            <i class="fas fa-award"></i>
+            <h3>الشهادات</h3>
+            <p>استخرج شهادتك المعتمدة</p>
         </a>
     </div>
-
-    <section class="about-section">
-        <div class="about-container">
-            <h2>رؤية المبادرة</h2>
-            <p>
-                نعمل في مبادرة "بنكمل بعض" على خلق بيئة تفاعلية تدعم أحلام الشباب العربي، 
-                من خلال ربط الخبرات الأكاديمية بالمهارات العملية، لنصنع جيلاً قادراً على الابتكار والقيادة في كافة المجالات.
-            </p>
-        </div>
-    </section>
 
     <script>
         const socket = io();
@@ -117,10 +90,9 @@
                 dot.className = "dot online-dot";
                 text.innerText = "بث مباشر الآن - اضغط للدخول";
                 text.style.color = "#166534";
-                text.style.fontWeight = "bold";
             } else {
                 dot.className = "dot offline-dot";
-                text.innerText = "لا يوجد بث مباشر حالياً";
+                text.innerText = "لا يوجد بث حالياً";
                 text.style.color = "#64748b";
             }
         });
