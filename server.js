@@ -2,79 +2,68 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
 app.use(express.json());
-// تشغيل الملفات من مجلد public
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// قاعدة بيانات المنصة الشاملة (حالة الموقع)
+// إعداد التخزين للملفات المرفوعة
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const dir = './uploads';
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+        cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+const upload = multer({ storage: storage });
+
 let siteState = {
     liveStatus: 'offline',
     streamUrl: '',
-    accessCode: '998877', // كود الدخول الافتراضي
-    tickerMessage: "📢 أهلاً بكم في المنصة الرسمية لمبادرة بنكمل بعض.. تابعوا آخر التحديثات هنا",
-    usersCount: 0,
+    accessCode: '998877',
+    tickerMessage: "📢 أهلاً بكم في المنصة الرسمية لمبادرة بنكمل بعض",
     articles: [] 
 };
 
-io.on('connection', (socket) => {
-    // زيادة عدد المتصلين عند الدخول
-    siteState.usersCount++;
+// استقبال المنشورات مع ملفات من الجهاز
+app.post('/upload-content', upload.fields([{ name: 'image' }, { name: 'video' }]), (req, res) => {
+    const { title, desc } = req.body;
+    const newPost = {
+        id: Date.now(),
+        title,
+        desc,
+        date: new Date().toLocaleString('ar-EG'),
+        img: req.files['image'] ? `/uploads/${req.files['image'][0].filename}` : null,
+        video: req.files['video'] ? `/uploads/${req.files['video'][0].filename}` : null
+    };
+    
+    siteState.articles.unshift(newPost);
     io.emit('syncState', siteState);
+    res.json({ success: true });
+});
 
-    // مزامنة البيانات فور دخول أي مستخدم جديد
+io.on('connection', (socket) => {
     socket.emit('syncState', siteState);
 
-    // استقبال تحديثات الإدارة الشاملة (من dashboard.html)
     socket.on('updateState', (data) => {
-        // دمج التحديثات الجديدة مع الحالة الحالية
         siteState = { ...siteState, ...data };
-        
-        // تحديث جميع المستخدمين لحظياً في كل الصفحات (الرئيسية، البروفايل، البث)
-        io.emit('syncState', siteState);
-        console.log("تم تحديث حالة النظام:", siteState);
-    });
-
-    // استقبال تحديثات الإدارة القديمة (للتوافق مع الأكواد السابقة)
-    socket.on('adminUpdate', (data) => {
-        if (data.type === 'LIVE') {
-            siteState.liveStatus = data.status;
-            siteState.streamUrl = data.url;
-        } else if (data.type === 'TICKER') {
-            siteState.tickerMessage = data.message;
-        } else if (data.type === 'ARTICLE') {
-            siteState.articles.unshift(data.article);
-        }
         io.emit('syncState', siteState);
     });
 
-    // إدارة دردشة البث المباشر
-    socket.on('sendChatMessage', (data) => {
-        io.emit('newChatMessage', data);
-    });
-
-    socket.on('disconnect', () => {
-        siteState.usersCount = Math.max(0, siteState.usersCount - 1);
+    socket.on('deletePost', (postId) => {
+        siteState.articles = siteState.articles.filter(p => p.id !== postId);
         io.emit('syncState', siteState);
     });
 });
 
-// توجيه الصفحات
-app.get('/:page', (req, res) => {
-    const page = req.params.page;
-    if (page.endsWith('.html')) {
-        res.sendFile(path.join(__dirname, 'public', page));
-    } else {
-        res.sendFile(path.join(__dirname, 'public', `${page}.html`));
-    }
-});
-
-// تشغيل السيرفر
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`السيرفر يعمل على الرابط: http://localhost:${PORT}`);
-});
+server.listen(PORT, () => console.log(`Server: http://localhost:${PORT}`));

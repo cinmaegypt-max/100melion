@@ -2,17 +2,13 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مبادرة بنكمل بعض | الرئيسية</title>
+    <title>بنكمل بعض | الرئيسية</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-
-    <div class="ticker-wrap">
-        <div class="ticker-text" id="tickerMsg">📢 أهلاً بكم في المنصة الرسمية لمبادرة "بنكمل بعض".. نعتز بثقتكم ونتطلع لبناء مستقبل عربي مشرق معاً.</div>
-    </div>
+    <div class="ticker-wrap"><div class="ticker-text" id="tickerMsg">تحميل...</div></div>
 
     <header class="main-header">
         <div class="logo">بنكمل بعض</div>
@@ -20,82 +16,42 @@
             <ul class="nav-menu">
                 <li><a href="index.html">الرئيسية</a></li>
                 <li><a href="courses.html">المنصة</a></li>
-                <li><a href="committees.html">اللجان</a></li>
-                <li><a href="certificates.html">الشهادات</a></li>
-                <li><a href="dashboard.html">لوحة التحكم</a></li>
+                <li><a href="profile.html">ملفي الشخصي</a></li>
                 <li><a href="register.html" class="btn-join">انضم لنا</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="container">
-        
-        <div class="card" style="text-align:center; background: linear-gradient(45deg, #1e3a8a, #3b5998); color: white; padding: 60px 20px; border-radius: 15px;">
-            <h1 style="margin-bottom: 10px;">مبادرة نشر الثقافة والعلوم لـ 100 مليون عربي</h1>
-            <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">نحو جيل عربي واعٍ، مثقف، ومبدع يقود التنمية والسلام.</p>
-            
-            <div class="search-container">
-                <input type="text" id="mainSearchInput" placeholder="ابحث عن لجنة، رؤية، أو هدف...">
-                <button onclick="executeSearch()"><i class="fas fa-search"></i> بحث</button>
+        <div id="postsList">
             </div>
-        </div>
-
-        <div class="card search-item">
-            <h2><i class="fas fa-eye" style="color: var(--primary);"></i> رؤية المنصة</h2>
-            <p>نعمل في "بنكمل بعض" على توفير بيئة تعليمية تفاعلية تهدف إلى ربط الشباب العربي بالعلوم الحديثة ومهارات ريادة الأعمال لتمكينهم في سوق العمل العالمي.</p>
-        </div>
-
-        <div class="card search-item">
-            <h2><i class="fas fa-bullseye" style="color: var(--primary);"></i> أهدافنا الاستراتيجية</h2>
-            <p>نسعى لتطوير المهارات الرقمية، دعم الابتكار العلمي في الجامعات، وتعزيز الهوية الثقافية العربية من خلال لجاننا التنفيذية المتخصصة.</p>
-        </div>
-
-        <div class="card search-item">
-            <h2><i class="fas fa-users" style="color: var(--primary);"></i> لماذا تنضم إلينا؟</h2>
-            <p>لأننا نوفر لك مسارات تدريبية معتمدة، كود بث مباشر للمحاضرات، وفرصة لعرض ابتكاراتك العلمية أمام خبراء متخصصين في كافة المجالات.</p>
-        </div>
-
     </div>
 
     <script>
-        // أولاً: وظيفة البحث الذكي داخل الصفحة
-        function executeSearch() {
-            const query = document.getElementById('mainSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.search-item');
-            
-            items.forEach(item => {
-                const content = item.innerText.toLowerCase();
-                if (content.includes(query)) {
-                    item.style.display = "block";
-                    item.style.animation = "fadeIn 0.5s";
-                } else {
-                    item.style.display = "none";
-                }
-            });
-        }
-
-        // تشغيل البحث عند الضغط على زر Enter
-        document.getElementById('mainSearchInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                executeSearch();
-            }
-        });
-
-        // ثانياً: استقبال تحديثات شريط الأخبار من السيرفر (Socket.io)
         const socket = io();
         socket.on('syncState', (state) => {
-            if(state.tickerMessage) {
-                document.getElementById('tickerMsg').innerText = "📢 " + state.tickerMessage;
-            }
+            document.getElementById('tickerMsg').innerText = state.tickerMessage;
+            
+            const list = document.getElementById('postsList');
+            list.innerHTML = '';
+            
+            state.articles.forEach(post => {
+                list.innerHTML += `
+                    <div class="card">
+                        <div style="display:flex; justify-content:space-between; color:#888; font-size:0.8rem;">
+                            <span>${post.date}</span>
+                        </div>
+                        <h2 style="margin:10px 0; color:#1e3a8a;">${post.title}</h2>
+                        <p>${post.desc}</p>
+                        ${post.img ? `<img src="${post.img}" style="width:100%; border-radius:12px; margin-top:15px;">` : ''}
+                        ${post.video ? `
+                            <video controls style="width:100%; border-radius:12px; margin-top:15px; background:#000;">
+                                <source src="${post.video}" type="video/mp4">
+                            </video>` : ''}
+                    </div>
+                `;
+            });
         });
     </script>
-
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
-
 </body>
 </html>
