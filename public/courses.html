@@ -6,76 +6,60 @@
     <title>الأكاديمية الرقمية | بنكمل بعض</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css"> 
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; }
-        .container { max-width: 1200px; margin: 50px auto; padding: 20px; }
-        .header-title { text-align: center; color: #1e3a8a; margin-bottom: 40px; font-size: 2.5rem; }
-        
-        .courses-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 30px; 
-        }
-        
-        .course-card { 
-            background: white; 
-            border-radius: 20px; 
-            padding: 35px; 
-            text-align: center; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
-            transition: 0.3s; 
-            border-top: 6px solid #1e3a8a; 
-        }
-        .course-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        .course-card i { font-size: 3.5rem; color: #1e3a8a; margin-bottom: 20px; }
-        .course-card h3 { color: #1e3a8a; margin-bottom: 15px; }
-        .course-card p { color: #666; line-height: 1.6; }
-
-        /* الأزرار المحدثة */
-        .btn-action { 
-            display: inline-block; 
-            margin-top: 20px; 
-            padding: 12px 30px; 
-            background: #1e3a8a; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 10px; 
-            font-weight: bold; 
-            transition: 0.3s; 
-        }
-        .btn-action:hover { background: #ffd700; color: #1e3a8a; }
-        .btn-action.gold-btn { background: #ffd700; color: #1e3a8a; }
-        .btn-action.gold-btn:hover { background: #1e3a8a; color: white; }
-    </style>
 </head>
 <body>
+    <header class="main-header">
+        <div class="logo">بنكمل بعض</div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="courses.html">المنصة</a></li>
+                <li><a href="register.html" class="btn-join">انضم لنا</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <div class="container">
-        <h1 class="header-title">تخصصات ولجان المبادرة</h1>
+        <h1 class="header-title">لجان المبادرة والتخصصات التدريبية</h1>
         
+        <div class="search-container" style="margin-bottom: 40px;">
+            <input type="text" id="courseSearch" placeholder="ابحث عن اسم اللجنة...">
+            <button onclick="searchCourses()"><i class="fas fa-search"></i></button>
+        </div>
+
         <div class="courses-grid">
             <div class="course-card">
                 <i class="fas fa-palette"></i>
                 <h3>لجنة الثقافة والفنون</h3>
-                <p>نعمل على دعم المؤلفين الشباب وتنظيم مهرجانات "سلام عربي" لتبادل الثقافات.</p>
-                <a href="/culture.html" class="btn-action">دخول المسار الثقافي</a>
+                <p>دعم المؤلفين الشباب، الفنون التشكيلية، والمسرح.</p>
+                <a href="culture.html" class="btn-submit" style="text-decoration:none; display:inline-block;">حجز مسار تدريبي</a>
             </div>
-
+            
             <div class="course-card">
                 <i class="fas fa-microscope"></i>
                 <h3>لجنة العلوم والبحث العلمي</h3>
-                <p>مناقشة أبحاث الماجستير والدكتوراه ودعم الابتكارات التقنية وبراءات الاختراع.</p>
-                <a href="/science.html" class="btn-action gold-btn">تقديم بحث علمي</a>
+                <p>مناقشة رسائل الماجستير والدكتوراه ودعم الابتكار.</p>
+                <a href="science.html" class="btn-submit" style="text-decoration:none; display:inline-block; background:#2ecc71;">تقديم بحث</a>
             </div>
-
+            
             <div class="course-card">
                 <i class="fas fa-briefcase"></i>
                 <h3>لجنة ريادة الأعمال</h3>
-                <p>تأهيل 100 ألف رائد أعمال وتوفير الدعم الفني والقانوني للمشاريع الناشئة.</p>
-                <a href="/business.html" class="btn-action">ابدأ مشروعك معنا</a>
+                <p>تمكين رواد الأعمال ودعم المشاريع الناشئة.</p>
+                <a href="business.html" class="btn-submit" style="text-decoration:none; display:inline-block; background:#1e3a8a;">دعم مشروعي</a>
             </div>
         </div>
     </div>
 
+    <script>
+        function searchCourses() {
+            const query = document.getElementById('courseSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.course-card');
+            cards.forEach(card => {
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                card.style.display = title.includes(query) ? "block" : "none";
+            });
+        }
+    </script>
 </body>
 </html>

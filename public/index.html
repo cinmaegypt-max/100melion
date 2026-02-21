@@ -6,55 +6,6 @@
     <title>مبادرة بنكمل بعض | الرئيسية</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="/socket.io/socket.io.js"></script>
-    <style>
-        /* تنسيق الشريط الإعلاني المتحرك */
-        .ticker-wrap { 
-            background: var(--accent); 
-            color: var(--primary); 
-            padding: 10px 0; 
-            font-weight: bold; 
-            overflow: hidden; 
-            border-bottom: 2px solid var(--primary);
-        }
-        .ticker-text { 
-            display: inline-block; 
-            white-space: nowrap; 
-            padding-right: 100%; 
-            animation: ticker 25s linear infinite; 
-        }
-        @keyframes ticker {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-
-        /* تنسيق شريط البحث الفاخر */
-        .search-container {
-            margin: 25px auto;
-            max-width: 600px;
-            display: flex;
-            background: white;
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .search-container input {
-            flex: 1;
-            border: none;
-            padding: 15px 25px;
-            outline: none;
-            font-size: 1rem;
-        }
-        .search-container button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0 25px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .search-container button:hover { background: var(--accent); color: var(--primary); }
-    </style>
 </head>
 <body>
 
@@ -66,12 +17,12 @@
         <div class="logo">بنكمل بعض</div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="/index.html">الرئيسية</a></li>
-                <li><a href="/courses.html">المنصة</a></li>
-                <li><a href="/committees.html">اللجان</a></li>
-                <li><a href="/certificates.html">الشهادات</a></li>
-                <li><a href="/dashboard.html">لوحة التحكم</a></li>
-                <li><a href="/register.html" class="btn-join">انضم لنا</a></li>
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="courses.html">المنصة</a></li>
+                <li><a href="committees.html">اللجان</a></li>
+                <li><a href="certificates.html">الشهادات</a></li>
+                <li><a href="dashboard.html">لوحة التحكم</a></li>
+                <li><a href="register.html" class="btn-join">انضم لنا</a></li>
             </ul>
         </nav>
     </header>
@@ -82,24 +33,36 @@
             <p style="font-size: 1.2rem; opacity: 0.9;">نحو جيل عربي واعٍ، مثقف، ومبدع يقود التنمية والسلام.</p>
             
             <div class="search-container">
-                <input type="text" placeholder="ابحث عن لجنة، محاضرة، أو تخصص...">
-                <button><i class="fas fa-search"></i> بحث</button>
+                <input type="text" id="searchInput" placeholder="ابحث عن رؤية، هدف، أو قسم...">
+                <button onclick="runSearch()"><i class="fas fa-search"></i> بحث</button>
             </div>
         </div>
 
-        <div class="card">
+        <div class="card search-item">
             <h2>رؤية المنصة</h2>
             <p>نعمل في "بنكمل بعض" على توفير بيئة تعليمية تفاعلية تهدف إلى ربط الشباب العربي بالعلوم الحديثة ومهارات ريادة الأعمال لتمكينهم في سوق العمل العالمي.</p>
+        </div>
+        
+        <div class="card search-item">
+            <h2>أهدافنا الاستراتيجية</h2>
+            <p>تطوير المهارات الرقمية، دعم الابتكار العلمي، وتعزيز الهوية الثقافية العربية.</p>
         </div>
     </div>
 
     <script>
-        const socket = io();
-        // استقبال تحديثات الشريط الإعلاني من لوحة التحكم
-        socket.on('syncState', (state) => {
-            if(state.tickerMessage) {
-                document.getElementById('tickerMsg').innerText = state.tickerMessage;
-            }
+        function runSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const items = document.querySelectorAll('.search-item');
+            
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                item.style.display = text.includes(query) ? "block" : "none";
+            });
+        }
+
+        // تفعيل البحث عند الضغط على Enter
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') runSearch();
         });
     </script>
 </body>
